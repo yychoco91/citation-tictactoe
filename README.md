@@ -1,22 +1,22 @@
-# c9_tictactoe
+# c11_tictactoe
 
 ### REQUIREMENTS
 - Must have at least 2 players
 - Basically follow tic-tac-toe game play (ie alternating players, a number of contiguous cells in a row to win.
-- 2 game board sizes (can be fixed or dynamic)
+- Player-selected gameboard size between 3 and at least 12 in size
 - Players must be displayed.  The turn of the player must be displayed
-- Game board (the cells themselves) must be made via js/jquery
+- Player-selected win-condition size between 3 and the maximum current board size
 - *mystery requirement*
-  - opponent must be able to play an AI
-  - doesn't matter how the AI plays, though if you make a really good one, give it the ability to be scaled between hard and easy
+  - TO BE REVEALED 10AM 10/18
 
 ### Judging criteria
-- Innovation
-- Attractiveness
+- Intiutiveness / Ease of Use
+- Attractiveness / Appeal
 - Code quality (comments, naming conventions, etc)
-- Ease of use (how easy is it to use / understand what to do)
+- Live Presentation
+- Task Management
 
 ### Instructions for participants:
 - Project lead fork this repo
-- Add other team members as participants on your repo (click on the + in the top right corner, then "add collaborators"
+- Add other team members as participants on your repo (click on the + in the top right corner, then "add collaborators".  Team members must accept the collaboration email.
 - Other team members clone the repo from the project lead's fork
