@@ -14,9 +14,15 @@
 - Attractiveness / Appeal
 - Code quality (comments, naming conventions, etc)
 - Live Presentation
-- Task Management
+- Task Management  (Must add daniel.paschal@learningfuze.com to your project's meistertask)
 
 ### Instructions for participants:
 - Project lead fork this repo
 - Add other team members as participants on your repo (click on the + in the top right corner, then "add collaborators".  Team members must accept the collaboration email.
 - Other team members clone the repo from the project lead's fork
+
+### Requirement for submission
+- Live copy link to gh-pages: 
+	- must put code on gh-pages (copy the code to a branch called gh-pages, then access the live code via <your user name>.github.io/<repo name>/<main file name>)
+- Pull request link to code for commenting
+
