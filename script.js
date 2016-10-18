@@ -139,10 +139,29 @@ var player_template = function(symbol, element){
 
 
 
+
 var main_game = null;
 $(document).ready(function(){
+    apply_click_handlers()
     main_game = new game_template($('#gamebody'));
     main_game.create_cells(9);
     main_game.create_players();
 });
 
+function apply_click_handlers() {
+    $("#submit").click(function(){
+        var board_size = $("#board_size option:selected").val();
+       console.log("board_size is ",board_size);
+
+        var cell_width = 100/board_size;
+        cell_width = cell_width.toFixed(2);
+        cell_width = cell_width + "%";
+        console.log("Cell width is " + cell_width);
+        $("#gamebody").html("");
+        main_game = new game_template($('#gamebody'));
+        main_game.create_cells(board_size*board_size);
+        main_game.create_players();
+        $(".ttt_cell").css("width",cell_width);
+        $(".ttt_cell").css("height",cell_width);
+    });
+}
