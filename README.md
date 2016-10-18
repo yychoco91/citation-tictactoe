@@ -7,7 +7,8 @@
 - Players must be displayed.  The turn of the player must be displayed
 - Player-selected win-condition size between 3 and the maximum current board size
 - *mystery requirement*
-  - TO BE REVEALED 10AM 10/18
+  - Make a tic tac toe game that informs / questions students about proper citation techniques
+  - See sample questions here: https://docs.google.com/document/d/1aGZXONiBeRwIyjw822ZD1QS3r-X6T1nkxkmBIJ0XFz0/pub
 
 ### Judging criteria
 - Intiutiveness / Ease of Use
