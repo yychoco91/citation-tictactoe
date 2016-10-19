@@ -68,8 +68,8 @@ var cell_template = function(parent,counter){
                 self.element.addClass('selected');
                 self.change_symbol(self.symbol);
                 self.parent.cell_clicked(self);
-                $("#answer").off("click");
             }
+            $("#answer").off("click");
         });
 
 
