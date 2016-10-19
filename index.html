@@ -37,6 +37,9 @@
         #stats ul {
             list-style-type: none;
             height: 100%;
+            text-align: center;
+            padding: 0;
+            font-weight: bold;
         }
         #stats {
             height: 100%;
@@ -44,11 +47,14 @@
             text-shadow: 1px 2px 0 white,
             1px 2px 0 black;
         }
-
+        h3 {
+            margin: 0;
+        }
         #timer {
             border: solid black 1px;
+            border-radius: 90px;
             height: 100%;
-
+            text-align: center;
         }
         #player_area {
             text-align: center;
@@ -62,6 +68,7 @@
         #question_area {
             /*background-color: lightgreen;*/
             height: 65vh;
+            padding: 0;
         }
 
         #gamebody{
@@ -103,9 +110,33 @@
         }
         #selectarea {
             position: absolute;
-            top: 50%;
+            top: 70%;
             left: 50%;
             transform: translate(-50%,-50%);
+        }
+        #question {
+            height: 18vh;
+            background-color: lavender;
+            border: solid black 1px;
+            margin: 0;
+        }
+
+        .choices {
+            margin: 5px;
+            border: 1px solid black;
+            background-color: grey;
+            padding: 5px;
+        }
+        .choices:hover {
+            background-color: red;
+            cursor: pointer;
+        }
+
+        .advice {
+            margin: 5px;
+            border: 1px solid black;
+            background-color: red;
+            padding: 5px;
         }
     </style>
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
@@ -120,10 +151,13 @@
     <div id="stats_player_area" class="col-xs-12">
         <div id="stats" class="col-xs-2">
             <ul>
-                <li>Stats</li>
+                <li><h3>Stats</h3></li>
                 <li>Games Played</li>
-                <li></li>
-                <li></li>
+                <p class="value"></p>
+                <li>Players Score</li>
+                <p class="value"></p>
+                <li>Category Proficiency</li>
+                <p class="value"></p>
                 <br>
                 <li><button>Reset</button></li>
             </ul>
@@ -134,19 +168,38 @@
                 <div class="player_indicator" id="player2"><span>O</span></div>
             </div>
             <div id="selectarea">
-                Select Board Size: <select name="board_size" id="board_size">
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-                <option>11</option>
-                <option>12</option>
-            </select>
-                <button id="submit">Submit</button>
+                <div>
+                    Select Board Size: <select name="board_size" id="board_size">
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                </select>
+                </div>
+                <div>
+                    Select Win Size: <select name="win_size" id="win_size">
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                </select>
+
+                </div>
+                <div>
+                    <button id="submit">Submit</button>
+                </div>
             </div>
         </div>
         <div id="timer" class="col-xs-2">
@@ -163,7 +216,12 @@
 </div>
 <div id="question_area" class="col-xs-6">
     <div class="col-xs-12">
+        <div id="question" class="col-xs-12">
+            <h1>Question</h1>
+        </div>
+        <div id="answer">
 
+        </div>
     </div>
 </div>
 </div>
