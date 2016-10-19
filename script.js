@@ -1,7 +1,7 @@
 /**
  * Created by danh on 10/18/16.
  */
-var cell_template = function(parent){
+var cell_template = function(parent,counter){
     var self = this;
     this.parent = parent;
     this.element = null;
@@ -10,15 +10,34 @@ var cell_template = function(parent){
         this.element = $("<div>",
             {
                 class:'ttt_cell',
-                html: '&nbsp;'
+                html: counter
             }
         ).click(this.cell_click);
         return this.element;
     };
+
     this.cell_click = function(){
         if(self.element.hasClass('selected')){
             return;
         }
+
+        var qdiv = $("<div>",{
+            text: 'What is 1+2?'
+        });
+
+        var q_array = [];
+
+        for(i=0;i<=3;i++) {
+            q_array.push($("<div id='"+i+"'>").text(i));
+        }
+        q_array.join('');
+
+
+        calltimer();
+        count = 5; // this resets the counter
+        $("#question_area").html('');
+        $("#question_area").append(qdiv);
+        $("#question_area").append(q_array);
         //console.log('this cell clicked',self.element);
         var current_player = self.parent.get_current_player();
         self.symbol = current_player.get_symbol();
@@ -60,7 +79,7 @@ var game_template = function(main_element){
     this.create_cells = function(cell_count){
         //console.log('game template create cells called');
         for(var i=0; i<cell_count; i++){
-            var cell = new cell_template(this);
+            var cell = new cell_template(this,i);
             var cell_element = cell.create_self();
             this.cell_array.push(cell);
             this.element.append(cell_element);
@@ -164,4 +183,26 @@ function apply_click_handlers() {
         $(".ttt_cell").css("width",cell_width);
         $(".ttt_cell").css("height",cell_width);
     });
+}
+
+var count=5;
+function calltimer() {
+    this.counter=setInterval(timer, 1000); //1000 will  run it every 1 second
+}
+
+function timer()
+{
+    count=count-1;
+    if (count <= 0)
+    {
+        clearInterval(self.counter);
+        //counter ended, do something here
+    }
+    if(count === 0) {
+        alert("TIME OVER");
+    }
+    //Do code for showing the number of seconds here
+    $("#timer h1").text(count);
+    console.log(count);
+
 }
