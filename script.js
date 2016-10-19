@@ -55,7 +55,7 @@ var cell_template = function(parent,counter){
                 $("#answer").append(advice);
             } else {
                 console.log("They chose wrong");
-                //console.log("Advice is ",advice);
+                console.log("Advice is ",advice);
                 $("#answer").append(advice);
                 outcome = false;
             }
