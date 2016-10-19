@@ -239,22 +239,98 @@ function timer() {
     console.log(count);
 }
 
-
-var questionArray=[
-    'If a webpage citation has no author, what part of the citation do you use as the in-text or parenthetical citation?<br>(a)The webpage article title (which is in quotes)<br>(b)The publisher of the website;',
-    'What is the password to log into the library website <br>(a)lions<br>(b)library<br>(c)JSerra',
+var questionArray=['Veronica Smith<br> Mr. Thornton<br> U.S. History – Per. 2 <br>10 Sept. 2016,  Is this proper MLA heading?',
+    ' Are in-text citations the same thing as parenthetical citations?',
+    'Does MLA 8 allow you to underline, italicize, or bold the title of your paper?',
+    'Choose the proper format for your MLA 8 paper',
+    'Choose the correct way to list your sources on your Works Cited document',
+    'Which method of indentation do you use on your works cited document when formatting your citations?',
+    'A quote that goes over four lines of text:',
+    'When do you cite a source in your paper?',
+    'In this citation, what is the title of the book? <br> Barnaby, Benjamin. <em>Cool Science for Middle School Science Fairs</em>, Yale UP, 2010. ',
+    'What type of source is this citation for? <br> Garner, Anthony. “History of 20th Century Literature.” <em>Literature Database</em>, www.litdb.com/history/20th-century.html. Accessed 16 Aug. 2016.',
+    'If the reader of your paper wants more information on a source cited in-text, where do they look for more information?',
+    'What type of source is this citation for? <br>Stanton, Daniel. “Methods of Analysis in Research Papers.” <em>Science of Informatics</em>, vol. 12, no. 2, 2011, pp. 2-15. JSTOR, doi:10.10.5.1/access_secure_doc#30892. Accessed 11 Oct. 2015.',
+    'In this citation, what is the name of the publisher? Jones, Andrew. “The Cambodian Genocide.” <em>Genocide: A comprehensive introduction</em>, Routledge, 2006, pp. 40-60.',
+    'In this citation, what does et al. stand for? Pearsall, Mitchell, et al. <em>A Concise History of Central America</em>, Cambridge UP, 2015.',
+    ' When citing sources in your paper:',
+    'In MLA 8, are you required to include page numbers at the top of your works cited and/or annotated bibliography pages?',
+    'Where in your paper does your works cited go?',
+    'What would be considered a ‘container’ in MLA 8?',
+    'These are book citations. Which one is correct?',
+    'When using NoodleTools to cite your sources, do you have to fill in every single box to get a proper citation? ',
+    'When you block indent a direct quote, how many spaces or tabs do you use to indent? ',
+    'When citing a web source, whether from a website or a database, do you include a URL in your citation?',
+    'Which citation is correct?',
+    'Which example is a proper in-text (parenthetical) citation?',
+    'Is this the correct order to list these citations on your works cited? How do you know what order to put them in? ',
+    'If a webpage citation has no author, what part of the citation do you use as the in-text or parenthetical citation?',
+    'What is the password to log into the library website?'
 ];
 
-var choiceArray=[
+var choicesArray=['Yes <br> No',
+    'Yes <br> No',
+    'Yes <br> No',
+    '(a)Single-spaced, 12 pt. Arial font <br>(b)Double-spaced, 14 pt. Times New Roman font <br>(c)Double-spaced, 12 pt. Times New Roman font',
+    '(a) List them in the order that they appear in your paper <br>(b) List them in alphabetical (A to Z) order.',
+    '(a) Hanging indent <br>(b) block indent;',
+    '(a)Is considered plagiarism <br>(b)Should be block indented.',
+    '(a)When you directly quote someone or something <br>(b) When you interview someone and use something that they said <br>(c)When you use common knowledge – like ‘Water freezes at 32 degrees F’<br>(d)When you put a direct quote into your own words <br>(e)(a), (b), and (d) only. ',
+    '(a) Barnaby, Benjamin <br> (b) Yale UP (c) 2010 <br>(d)<em>Cool Science for Middle School Science Fairs </em> ',
+    '(a)A book on 20th Century Literature; <br>(b)A journal article in a database; <br>(c)A webpage',
+    '(a)The Internet <br>(b)The index <br>(c)Your works cited document',
+    '(a) Webpage <br> (b)JSTOR journal article <br> (c) Magazine',
+    '(a) Routledge <br> (b) Jones,Andrew <br> (c)"The Cambrian Genocide" <br> (d) <em> Genocide:A Comprehenisve Introduction </em> <br> (e)2006 <br> (f) pp.40-60',
+    '(a)The words et al. are a suffix to the author’s name; <br>(b)The words et al. mean ‘and others’, because there are more than three authors.<br>(c)The words et al. mean there are editors and authors for this book.',
+    '(a)You only need to cite each source one time – no matter how often you use it;<br>(b)You should cite direct quotes at the end of the sentence where it is used.',
+    '(a)No, only your paper needs to have page numbers; <br> (b)Yes, your paper, works cited, and annotated bibliography should have a running page number from the beginning of the document to the end.',
+    '(a)On the same page right after the last paragraph of your paper;<br>(b)On page one of your document;<br>(c)On a separate page after your paper.',
+    '(a)A TV show;<br>(b)A book;<br>(c)A journal;<br>(d)A website;<br>(e)A database;<br>(f)All of the above.',
+    '(a)Baron, Sandra.<em>Yosemite National Park</em>. New York: Chelsea, 2010, pp. 2-10. <br>(b)Baron, Sandra.<em> Yosemite National Park</em>, Chelsea, 2010, pp. 2-10',
+    '(a)Yes. That’s why the boxes are there. <br>(b)No. Only fill in the boxes necessary for the source you are citing.',
+    '(a)Ten spaces or two tabs <br> (b)Five spaces or one tab.',
+    '(a)No. URLs are long and messy and should never be included <br>(b)Yes! URLs are required by the new MLA 8 style.',
+    '(a)Johnson, Betty. “Abstract Art.”<em> Modern Art – San Francisco</em>, 24 Jan. 2015, www.MASF.org/abstract_art.html. Accessed 11 Oct. 2015. <br> (b)Johnson, Betty. “Abstract Art.”<em> Modern Art – San Francisco</em>, 24 Jan. 2015, http://www.MASF.org/abstract_art.html. Accessed 11 Oct. 2015.',
+    '(a)(239 Smith)<br>(b)(Smith, 239)<br>(c)(Smith, p. 239)<br>(d)(Smith 239)',
+    '(a)Smith, John. “Modern World History.”<br> (b)Smith, John. “World History Overview.”',
+    '(a)The webpage article title (which is in quotes)<br>(b)The publisher of the website;',
+    '(a)lions<br>(b)library <br>(c)JSerra'
+];
+
+var answerArray=['No',
+    'Yes',
+    'No',
+    '(c)Double-spaced, 12 pt. Times New Roman font',
+    '(b)List them in alphabetical (A to Z) order.',
+    '(a)Hanging indent',
+    '(b)Should be block indented.',
+    '(e)(a), (b), and (d) only.',
+    '(d)<em>Cool Science for Middle School Science Fairs.</em> ',
+    '(c)A webpage',
+    '(c)Your works cited document',
+    '(b)JSTOR journal article',
+    '(a)Routledge',
+    '(b)The words et al. mean ‘and others’, because there are more than three authors.',
+    '(b)You should cite direct quotes at the end of the sentence where it is used.',
+    '(b)Yes, your paper, works cited, and annotated bibliography should have a running page number from the beginning of the document to the end.',
+    '(c)On a separate page after your paper.',
+    '(f)All of the above.',
+    '(b)Baron, Sandra.<em> Yosemite National Park</em>, Chelsea, 2010, pp. 2-10',
+    '(b)No. Only fill in the boxes necessary for the source you are citing.',
+    '(b)Five spaces or one tab.',
+    '(b)Yes! URLs are now required by the new MLA 8 style.',
+    '(a)Johnson, Betty. “Abstract Art.”<em> Modern Art – San Francisco</em>, 24 Jan. 2015, www.MASF.org/abstract_art.html. Accessed 11 Oct. 2015.',
+    '(d)(Smith 239)',
+    '(a)Smith, John. “Modern World History.',
     '(a)The webpage article title (which is in quotes)',
     '(b)library'
-]
-var answerArray=[
-    '(a) The webpage article title would be the next part of your citation, after an author’s name, so you would use the article title as your in-text citation.',
-    'library'
 ];
 
-var categoryArray=['citation format','source format', 'source type', 'MLA 8 format','in-text citations','works cited','web citations','quotes','library'];
+//var categoryArray=['citation format','source format', 'source type', 'MLA 8 format','in-text citations','works cited','web citations','quotes','library'];
+//var categoryArray=['citation format','citation source', 'source type', 'MLA 8 format','MLA 8 styles','in-text citations','works cited','web citations','citation style'];
+//var categoryArray=['4, 5, 4, 3, 6, 6, 8, 1,    '];
+
+//var categoryQuestions=[3, 4, 3, 3, 5, 5, 7, 5, 0, 2,4, 2, 0,0, 1, 3, 5, 3, 0, 1, 7, 6, 0, 4, 5, 4, 8 ];
 
 // function for win condition dynamically
 
