@@ -45,3 +45,40 @@ body{
 #selectarea {
     font-size: 16px;
 }
+#header {
+    text-align: center;
+    background-color: lavender;
+    height: 10vh;
+}
+
+#stats_player_area {
+    background-color: gray;
+    height: 25vh;
+}
+
+#stats ul {
+    list-style-type: none;
+    height: 100%;
+}
+#stats {
+    height: 100%;
+    border: solid black 1px;
+}
+
+#timer {
+    border: solid black 1px;
+    height: 100%;
+
+}
+#player {
+    text-align: center;
+}
+#game_area {
+    background-color: lightblue;
+    border: solid black 1px;
+    height: 65vh;
+}
+#question_area {
+    background-color: lightgreen;
+    height: 65vh;
+}
