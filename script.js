@@ -55,7 +55,7 @@ var cell_template = function(parent,counter){
                 $("#answer").append(advice);
             } else {
                 console.log("They chose wrong");
-                //console.log("Advice is ",advice);
+                console.log("Advice is ",advice);
                 $("#answer").append(advice);
                 outcome = false;
             }
@@ -193,13 +193,9 @@ var player_template = function(symbol, element){
 
 var main_game = null;
 $(document).ready(function(){
-<<<<<<< HEAD
+
     apply_click_handlers();
-    main_game = new game_template($('#gamebody'));
-=======
-    apply_click_handlers()
     main_game = new game_template($('#gamebody'),3);
->>>>>>> 3aa310c0d5b2709b9134148ec3503ef4f76e3135
     main_game.create_cells(9);
     main_game.create_players();
 });
@@ -299,20 +295,6 @@ var choicesArray=['Yes <br> No',
     '(a)lions<br>(b)library <br>(c)JSerra'
 ];
 
-<<<<<<< HEAD
-
-
-
-var answerArray=['No. In your heading, the month should be spelled out (10 September 2016).',
-    'Yes, they are the same thing.',
-    ' No. In MLA 8, titles should not be underlined, italicized, or bolded.',
-    '(c) Double-spaced, 12 pt. Times New Roman font',
-    '(b) List them in alphabetical order.',
-    '(a) Hanging indent.',
-    '(b) Should be block indented.',
-    '(e) (a), (b), and (d) only.',
-    '<em>Cool Science for Middle School Science Fairs.</em> ',
-=======
 var answerArray=['No',
     'Yes',
     'No',
@@ -322,7 +304,6 @@ var answerArray=['No',
     '(b)Should be block indented.',
     '(e)(a), (b), and (d) only.',
     '(d)<em>Cool Science for Middle School Science Fairs.</em> ',
->>>>>>> 3aa310c0d5b2709b9134148ec3503ef4f76e3135
     '(c)A webpage',
     '(c)Your works cited document',
     '(b)JSTOR journal article',
@@ -405,11 +386,4 @@ function calculateWinConditionArray(row) {
     //console.log("total", wintotal);
     return wintotal;
 }
-
-
-<<<<<<< HEAD
-// test
-
-
-
 
