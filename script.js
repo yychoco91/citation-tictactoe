@@ -23,14 +23,11 @@ var cell_template = function(parent,counter){
         var outcome = false;
         clearInterval(main_game.timeCounter);
         var randomIndex = Math.floor(Math.random() * questionArray.length);
-        var qParse = questionArray[randomIndex].split("<br>");
+        var cParse = choicesArray[randomIndex].split("<br>");
+        //var qParse = questionArray[randomIndex];
         var qdiv = $("<div>",{
-            html: qParse[0]
+            html: questionArray[randomIndex]
         });
-
-        //console.log(qParse);
-        var qParseCombined = qParse.join("<br>");
-        //console.log(qParseCombined);
 
         calltimer();
         count = 10; // this resets the counter
@@ -38,8 +35,8 @@ var cell_template = function(parent,counter){
         $("#answer").html('');
         $("#question").append(qdiv);
         //$("#question_area").append(q_array);
-        for (var i = 1; i<qParse.length;i++) {
-            $("#answer").append("<div id='a"+i+"' class='choices'>" + qParse[i] + "</div>");
+        for (var i = 0; i<cParse.length;i++) {
+            $("#answer").append("<div id='a"+i+"' class='choices'>" + cParse[i] + "</div>");
         }
         $("#answer").off("click");
         $("#answer").on("click",".choices",function() {
@@ -51,7 +48,7 @@ var cell_template = function(parent,counter){
                 text: answerArray[randomIndex]
             });
 
-            if(userChoice === choiceArray[randomIndex])
+            if(userChoice === answerArray[randomIndex])
             {
                 console.log("They chose the correct answer");
                 outcome = true;
