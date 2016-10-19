@@ -20,9 +20,9 @@ var cell_template = function(parent,counter){
         if(self.element.hasClass('selected')){
             return;
         }
-
+        var qParse = questionArray[randomIndex].split("<br>");
         var qdiv = $("<div>",{
-            html: questionArray[randomIndex]
+            html: qParse[0]
         });
 
         // var q_array = [];
