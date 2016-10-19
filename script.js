@@ -291,11 +291,11 @@ var answerArray=['No',
     '(b)library'
 ];
 
-//var categoryArray=['citation format','source format', 'source type', 'MLA 8 format','in-text citations','works cited','web citations','quotes','library'];
-var categoryArray=['citation format','citation source', 'source type', 'MLA 8 format','MLA 8 styles','in-text citations','works cited','web citations','citation style'];
-var categoryArray=['4, 5, 4, 3, 6, 6, 8, 1,    '];
 
-//var categoryQuestions=[3, 4, 3, 3, 5, 5, 7, 5, 0, 2,4, 2, 0,0, 1, 3, 5, 3, 0, 1, 7, 6, 0, 4, 5, 4, 8 ];
+var categoryArray=['citation format','citation source', 'source format', 'MLA 8 format','MLA 8 style','in-text citations','works cited','web citations','citation style'];
+var categoryArray=['4, 5, 4, 3, 2, 6, 3, 1, 8, 1, 5, 2, 8, 0, 0, 4, 6, 3, 0, 1, 8 , 7, 7 , 5, 6, 7, 2'];
+
+
 
 var randomIndex = Math.floor(Math.random() * questionArray.length);
 console.log(questionArray[randomIndex]);
