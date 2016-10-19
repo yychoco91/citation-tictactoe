@@ -412,5 +412,4 @@ function calculateWinConditionArray(row) {
 
 
 
-=======
->>>>>>> 3aa310c0d5b2709b9134148ec3503ef4f76e3135
+
