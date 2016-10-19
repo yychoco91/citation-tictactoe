@@ -20,17 +20,17 @@ var cell_template = function(parent,counter){
         if(self.element.hasClass('selected')){
             return;
         }
+        var outcome = false;
+        clearInterval(main_game.timeCounter);
+        var randomIndex = Math.floor(Math.random() * questionArray.length);
         var qParse = questionArray[randomIndex].split("<br>");
         var qdiv = $("<div>",{
             html: qParse[0]
         });
 
-        // var q_array = [];
-        // for(i=0;i<=3;i++) {
-        //     q_array.push($("<div id='"+i+"'>").text(i));
-        // }
-        // q_array.join('');
-
+        //console.log(qParse);
+        var qParseCombined = qParse.join("<br>");
+        //console.log(qParseCombined);
 
         calltimer();
         count = 10; // this resets the counter
@@ -38,14 +38,44 @@ var cell_template = function(parent,counter){
         $("#answer").html('');
         $("#question").append(qdiv);
         //$("#question_area").append(q_array);
-        $("#answer").append(answerArray[randomIndex]);
-        //console.log('this cell clicked',self.element);
-        var current_player = self.parent.get_current_player();
-        self.symbol = current_player.get_symbol();
-        console.log('current player\'s symbol: '+self.symbol);
-        self.element.addClass('selected');
-        self.change_symbol(self.symbol);
-        self.parent.cell_clicked(self);
+        for (var i = 1; i<qParse.length;i++) {
+            $("#answer").append("<div id='a"+i+"' class='choices'>" + qParse[i] + "</div>");
+        }
+        $("#answer").off("click");
+        $("#answer").on("click",".choices",function() {
+            console.log("random is " + randomIndex);
+            var userChoice = $(this).text();
+
+            var advice = $("<div>", {
+                class: "advice",
+                text: answerArray[randomIndex]
+            });
+
+            if(userChoice === choiceArray[randomIndex])
+            {
+                console.log("They chose the correct answer");
+                outcome = true;
+                $("#answer").append(advice);
+            } else {
+                console.log("They chose wrong");
+                //console.log("Advice is ",advice);
+                $("#answer").append(advice);
+                outcome = false;
+            }
+            //console.log("Time counter is " + main_game.timeCounter);
+            clearInterval(main_game.timeCounter);
+            if(outcome) {
+                var current_player = self.parent.get_current_player();
+                self.symbol = current_player.get_symbol();
+                console.log('current player\'s symbol: '+self.symbol);
+                self.element.addClass('selected');
+                self.change_symbol(self.symbol);
+                self.parent.cell_clicked(self);
+                $("#answer").off("click");
+            }
+        });
+
+
     };
     this.change_symbol = function(symbol){
         self.element.text(symbol);
@@ -57,7 +87,7 @@ var cell_template = function(parent,counter){
 
 
 
-var game_template = function(main_element){
+var game_template = function(main_element,board_size){
     //console.log('game template constructor called');
     var self = this;
     this.element = main_element;
@@ -77,6 +107,11 @@ var game_template = function(main_element){
         [0,4,8],
         [2,4,6]
     ];
+    //console.log("Hard Coded Win Conditions", this.win_conditions);
+    this.win_conditions = calculateWinConditionArray(board_size);
+    //console.log("Board size is " + board_size);
+    //console.log("Dynamic Win Conditions", this.win_conditions);
+
     this.create_cells = function(cell_count){
         //console.log('game template create cells called');
         for(var i=0; i<cell_count; i++){
@@ -123,7 +158,6 @@ var game_template = function(main_element){
             //console.log('checking win conditions ',this.win_conditions);
 
             for(var j=0; j<this.win_conditions[i].length; j++){
-
                 if(this.cell_array[this.win_conditions[i][j]].get_symbol() == current_player_symbol){
                     console.log('symbols match');
                     count++;
@@ -163,7 +197,7 @@ var player_template = function(symbol, element){
 var main_game = null;
 $(document).ready(function(){
     apply_click_handlers()
-    main_game = new game_template($('#gamebody'));
+    main_game = new game_template($('#gamebody'),3);
     main_game.create_cells(9);
     main_game.create_players();
 });
@@ -178,7 +212,7 @@ function apply_click_handlers() {
         cell_width = cell_width + "%";
         console.log("Cell width is " + cell_width);
         $("#gamebody").html("");
-        main_game = new game_template($('#gamebody'));
+        main_game = new game_template($('#gamebody'),board_size);
         main_game.create_cells(board_size*board_size);
         main_game.create_players();
         $(".ttt_cell").css("width",cell_width);
@@ -188,13 +222,13 @@ function apply_click_handlers() {
 
 var count=5;
 function calltimer() {
-    this.counter=setInterval(timer, 1000); //1000 will  run it every 1 second
+    main_game.timeCounter=setInterval(timer, 1000); //1000 will  run it every 1 second
 }
 
 function timer() {
     count = count - 1;
     if (count <= 0) {
-        clearInterval(self.counter);
+        clearInterval(main_game.timeCounter);
         //counter ended, do something here
     }
     if (count === 0) {
@@ -206,69 +240,77 @@ function timer() {
 }
 
 
-var questionArray=['Veronica Smith<br> Mr. Thornton<br> U.S. History – Per. 2 <br>10 Sept. 2016,  Is this proper MLA heading?',
-    ' Are in-text citations the same thing as parenthetical citations?',
-    'Does MLA 8 allow you to underline, italicize, or bold the title of your paper?',
-    'Choose the proper format for your MLA 8 paper <br> (a)Single-spaced, 12 pt. Arial font <br>(b)Double-spaced, 14 pt. Times New Roman font <br>(c)Double-spaced, 12 pt. Times New Roman font ',
-    'Choose the correct way to list your sources on your Works Cited document<br> (a) List them in the order that they appear in your paper <br>(b) List them in alphabetical (A to Z) order.',
-    'Which method of indentation do you use on your works cited document when formatting your citations <br>(a) Hanging indent <br>(b) block indent;',
-    'A quote that goes over four lines of text: (a)Is considered plagiarism <br>(b)Should be block indented.',
-    'When do you cite a source in your paper?<br> (a)When you directly quote someone or something <br>(b) When you interview someone and use something that they said <br>(c)When you use common knowledge – like ‘Water freezes at 32 degrees F’<br>When you put a direct quote into your own words <br>(a), (b), and (d) only. ',
-    'In this citation, what is the title of the book? <br> Barnaby, Benjamin. <em>Cool Science for Middle School Science Fairs</em>, Yale UP, 2010. ',
-    'What type of source is this citation for? <br> Garner, Anthony. “History of 20th Century Literature.” <em>Literature Database</em>, www.litdb.com/history/20th-century.html. Accessed 16 Aug. 2016.',
-    'If the reader of your paper wants more information on a source cited in-text, where do they look for more information?<br>(a)The Internet <br>(b)The index <br>(c)Your works cited document',
-    'What type of source is this citation for? <br>Stanton, Daniel. “Methods of Analysis in Research Papers.” <em>Science of Informatics</em>, vol. 12, no. 2, 2011, pp. 2-15. JSTOR, doi:10.10.5.1/access_secure_doc#30892. Accessed 11 Oct. 2015.',
-    'In this citation, what is the name of the publisher? Jones, Andrew. “The Cambodian Genocide.” <em>Genocide: A comprehensive introduction</em>, Routledge, 2006, pp. 40-60.',
-    'In this citation, what does et al. stand for? Pearsall, Mitchell, et al. <em>A Concise History of Central America</em>, Cambridge UP, 2015.<br>(a)The words et al. are a suffix to the author’s name; <br>(b)The words et al. mean ‘and others’, because there are more than three authors.<br>(c)The words et al. mean there are editors and authors for this book.',
-    ' When citing sources in your paper:<br>(a)You only need to cite each source one time – no matter how often you use it;<br>(b)You should cite direct quotes at the end of the sentence where it is used.',
-    'In MLA 8, are you required to include page numbers at the top of your works cited and/or annotated bibliography pages?<br>(a)No, only your paper needs to have page numbers; <br>Yes, your paper, works cited, and annotated bibliography should have a running page number from the beginning of the document to the end.',
-    'Where in your paper does your works cited go? <br>(a)On the same page right after the last paragraph of your paper;<br>(b)On page one of your document;<br>(c)On a separate page after your paper.',
-    'What would be considered a ‘container’ in MLA 8?<br>(a)A TV show;<br>(b)A book;<br>(c)A journal;<br>(d)A website;<br>(e)A database;<br>(f)All of the above.',
-    'These are book citations. Which one is correct <br> (a)Baron, Sandra.<em>Yosemite National Park</em>. New York: Chelsea, 2010, pp. 2-10. <br>(b)Baron, Sandra.<em> Yosemite National Park</em>, Chelsea, 2010, pp. 2-10',
-    'When using NoodleTools to cite your sources, do you have to fill in every single box to get a proper citation? <br>(a)Yes. That’s why the boxes are there. <br>(b)No. Only fill in the boxes necessary for the source you are citing.',
-    'When you block indent a direct quote, how many spaces or tabs do you use to indent? <br> (a)Ten spaces or two tabs <br> (b)Five spaces or one tab.',
-    'When citing a web source, whether from a website or a database, do you include a URL in your citation?<br> (a)No. URLs are long and messy and should never be included <br>(b)Yes! URLs are required by the new MLA 8 style.',
-    'Which citation is correct? <br>(a)Johnson, Betty. “Abstract Art.”<em> Modern Art – San Francisco</em>, 24 Jan. 2015, www.MASF.org/abstract_art.html. Accessed 11 Oct. 2015. <br> (b)Johnson, Betty. “Abstract Art.”<em> Modern Art – San Francisco</em>, 24 Jan. 2015, http://www.MASF.org/abstract_art.html. Accessed 11 Oct. 2015.',
-    'Which example is a proper in-text (parenthetical) citation?<br>(a)(239 Smith)<br>(b)(Smith, 239)<br>(c)(Smith, p. 239)<br>(d)(Smith 239)',
-    'Is this the correct order to list these citations on your works cited? How do you know what order to put them in? <br>Smith, John. “Modern World History.”<br>Smith, John. “World History Overview.”',
+var questionArray=[
     'If a webpage citation has no author, what part of the citation do you use as the in-text or parenthetical citation?<br>(a)The webpage article title (which is in quotes)<br>(b)The publisher of the website;',
-    'What is the password to log into the library website <br>(a)lions<br>(b)library <br>(c)JSerra',
+    'What is the password to log into the library website <br>(a)lions<br>(b)library<br>(c)JSerra',
 ];
 
-var answerArray=['No. In your heading, the month should be spelled out (10 September 2016).',
-    'Yes, they are the same thing.',
-    ' No. In MLA 8, titles should not be underlined, italicized, or bolded.',
-    '(c) Double-spaced, 12 pt. Times New Roman font',
-    '(b) List them in alphabetical order.',
-    '(a) Hanging indent.',
-    '(b) Should be block indented.',
-    '(e) (a), (b), and (d) only.',
-    '<em>Cool Science for Middle School Science Fairs.</em> ',
-    '(c)A webpage',
-    '(c) Your works cited document provides a full citation which gives the reader information about the in-text source you provide.',
-    'This citation is for a journal article in a database called JSTOR.',
-    'Routledge',
-    '(b) The words et al. is latin for “and others” and is used when there are 3+ authors or 2+ editors.',
-    '(b) You should cite direct quotes at the end of the sentence where it is used.',
-    '(b) Yes, there should be pages numbers provided for the entire document from beginning to end.',
-    '(c) On a separate page after your paper',
-    '(f) All of the above.',
-    '(b) is correct. You no longer include the city of publication in a citation. It is now optional and used only in special cases.',
-    '(b)  No. Only fill in the boxes necessary for the source you are citing.',
-    '(b) Five spaces or one tab – this is new to MLA 8.',
-    '(b) Yes! URLs are now required in your citations.',
-    '(a) is correct. In the URL, you do NOT include the http:// prefix. Start with whatever comes after the // marks.',
-    '(d) (Smith 239). is correct. There is no comma, and no p. used in the parenthetical citation.',
-    'Yes, this is the correct order to list them. Since the author’s name is the same – you have to alphabetize by the Title. So, “Modern” is before “World”.',
+var choiceArray=[
+    '(a)The webpage article title (which is in quotes)',
+    '(b)library'
+]
+var answerArray=[
     '(a) The webpage article title would be the next part of your citation, after an author’s name, so you would use the article title as your in-text citation.',
     'library'
 ];
 
 var categoryArray=['citation format','source format', 'source type', 'MLA 8 format','in-text citations','works cited','web citations','quotes','library'];
 
-var randomIndex = Math.floor(Math.random() * questionArray.length);
-console.log(questionArray[randomIndex]);
-console.log(questionArray[16]);
-console.log(answerArray[16]);
+// function for win condition dynamically
 
-// test
+function calculateWinConditionArray(row) {
+    console.log("row is " + row);
+    var win = [];
+    var wintotal = [];
+    row = parseInt(row);
+    for(var i = 0; i < row*row; i)
+    {
+        var temp = [];
+        for(var j=i; j<i+row; j++)
+        {
+            temp.push(j);
+        }
+        win.push(temp);
+        wintotal.push(temp);
+        i=j;
+
+    }
+
+    //console.log("horizontal",win);
+
+    var win = [];
+    for(var i=0;  i< row; i++)
+    {
+        temp = [];
+        for(j=i;j<row*row;j+=row)
+        {
+            temp.push(j);
+        }
+        win.push(temp);
+        wintotal.push(temp);
+    }
+
+    //console.log("vertical", win);
+
+    var win = [];
+    var temp = [];
+    for(var i=0;i<row*row;i+=row+1)
+    {
+        temp.push(i);
+
+    }
+    wintotal.push(temp);
+    //console.log("diagonal LR", temp);
+
+    var temp = [];
+    for(i=row-1;i<row*row-1;i+=row-1)
+    {
+        temp.push(i);
+    }
+    wintotal.push(temp);
+    //console.log("diagonal RL", temp);
+    //console.log("total", wintotal);
+    return wintotal;
+}
+
+
