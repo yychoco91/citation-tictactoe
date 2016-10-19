@@ -1,0 +1,84 @@
+body{
+    height: 100vh;
+    width: 100vh;
+    font-size: 0px;
+}
+
+#gamebody{
+    height: 60vh;
+    width: 60vh;
+    background-color: lavender;
+
+}
+.ttt_cell{
+    width: 33%;
+    box-sizing: border-box;
+    border: 1px solid black;
+    height: 33%;
+    display: inline-block;
+    font-size: initial;
+}
+
+#players{
+    background-color: lavender;
+    height: 20%;
+    width: 50%;
+}
+#players .player_indicator{
+    font-size: initial;
+    display: inline-block;
+    width: 50%;
+    height: 100%;
+    position: relative;
+}
+#players .player_indicator span{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    #transform: translate(-50%, -50%);
+}
+
+.active_player{
+    background-color: red;
+}
+
+#selectarea {
+    font-size: 16px;
+}
+#header {
+    text-align: center;
+    background-color: lavender;
+    height: 10vh;
+}
+
+#stats_player_area {
+    background-color: gray;
+    height: 25vh;
+}
+
+#stats ul {
+    list-style-type: none;
+    height: 100%;
+}
+#stats {
+    height: 100%;
+    border: solid black 1px;
+}
+
+#timer {
+    border: solid black 1px;
+    height: 100%;
+
+}
+#player {
+    text-align: center;
+}
+#game_area {
+    background-color: lightblue;
+    border: solid black 1px;
+    height: 65vh;
+}
+#question_area {
+    background-color: lightgreen;
+    height: 65vh;
+}
