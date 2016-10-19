@@ -33,11 +33,12 @@ var cell_template = function(parent,counter){
 
 
         calltimer();
-        count = 5; // this resets the counter
-        $("#question_area").html('');
-        $("#question_area").append(qdiv);
+        count = 10; // this resets the counter
+        $("#question").html('');
+        $("#answer").html('');
+        $("#question").append(qdiv);
         //$("#question_area").append(q_array);
-        $("#question_area").append(answerArray[randomIndex]);
+        $("#answer").append(answerArray[randomIndex]);
         //console.log('this cell clicked',self.element);
         var current_player = self.parent.get_current_player();
         self.symbol = current_player.get_symbol();
