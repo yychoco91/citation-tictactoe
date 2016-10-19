@@ -7,8 +7,10 @@
     <style>
         #header {
             text-align: center;
-            background-color: lavender;
+            background-color: lightcyan;
             height: 10vh;
+
+
         }
 
         #stats_player_area {
@@ -124,10 +126,11 @@
 </head>
 <body>
 <div>
+    <!--Game title-->
     <div id="header" class="col-xs-12">
         <h1>Tic-Tac-Toe</h1>
     </div>
-
+    <!--Stats list to display score, games played, proficiency and reset game-->
     <div id="stats_player_area" class="col-xs-12">
         <div id="stats" class="col-xs-2">
             <ul>
@@ -142,6 +145,7 @@
                 <li><button>Reset</button></li>
             </ul>
         </div>
+        <!--main tictactoe game area for player 1 and 2-->
         <div id="player_area" class="col-xs-8">
             <div id="players">
                 <div class="player_indicator" id="player1"><span>X</span></div>
@@ -177,6 +181,7 @@
                 </select>
 
                 </div>
+                <!--submit button for win size-->
                 <div>
                     <button id="submit">Submit</button>
                 </div>
