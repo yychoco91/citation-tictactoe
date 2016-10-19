@@ -162,7 +162,7 @@ var player_template = function(symbol, element){
 
 var main_game = null;
 $(document).ready(function(){
-    apply_click_handlers()
+    apply_click_handlers();
     main_game = new game_template($('#gamebody'));
     main_game.create_cells(9);
     main_game.create_players();
@@ -235,6 +235,9 @@ var questionArray=['Veronica Smith<br> Mr. Thornton<br> U.S. History – Per. 2 
     'What is the password to log into the library website <br>(a)lions<br>(b)library <br>(c)JSerra',
 ];
 
+
+
+
 var answerArray=['No. In your heading, the month should be spelled out (10 September 2016).',
     'Yes, they are the same thing.',
     ' No. In MLA 8, titles should not be underlined, italicized, or bolded.',
@@ -272,3 +275,6 @@ console.log(questionArray[16]);
 console.log(answerArray[16]);
 
 // test
+
+
+
