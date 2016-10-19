@@ -20,31 +20,62 @@ var cell_template = function(parent,counter){
         if(self.element.hasClass('selected')){
             return;
         }
-
+        var outcome = false;
+        clearInterval(main_game.timeCounter);
+        var randomIndex = Math.floor(Math.random() * questionArray.length);
+        var qParse = questionArray[randomIndex].split("<br>");
         var qdiv = $("<div>",{
-            html: questionArray[randomIndex]
+            html: qParse[0]
         });
 
-        // var q_array = [];
-        // for(i=0;i<=3;i++) {
-        //     q_array.push($("<div id='"+i+"'>").text(i));
-        // }
-        // q_array.join('');
-
+        //console.log(qParse);
+        var qParseCombined = qParse.join("<br>");
+        //console.log(qParseCombined);
 
         calltimer();
-        count = 5; // this resets the counter
-        $("#question_area").html('');
-        $("#question_area").append(qdiv);
+        count = 10; // this resets the counter
+        $("#question").html('');
+        $("#answer").html('');
+        $("#question").append(qdiv);
         //$("#question_area").append(q_array);
-        $("#question_area").append(answerArray[randomIndex]);
-        //console.log('this cell clicked',self.element);
-        var current_player = self.parent.get_current_player();
-        self.symbol = current_player.get_symbol();
-        console.log('current player\'s symbol: '+self.symbol);
-        self.element.addClass('selected');
-        self.change_symbol(self.symbol);
-        self.parent.cell_clicked(self);
+        for (var i = 1; i<qParse.length;i++) {
+            $("#answer").append("<div id='a"+i+"' class='choices'>" + qParse[i] + "</div>");
+        }
+        $("#answer").off("click");
+        $("#answer").on("click",".choices",function() {
+            console.log("random is " + randomIndex);
+            var userChoice = $(this).text();
+
+            var advice = $("<div>", {
+                class: "advice",
+                text: answerArray[randomIndex]
+            });
+
+            if(userChoice === choiceArray[randomIndex])
+            {
+                console.log("They chose the correct answer");
+                outcome = true;
+                $("#answer").append(advice);
+            } else {
+                console.log("They chose wrong");
+                //console.log("Advice is ",advice);
+                $("#answer").append(advice);
+                outcome = false;
+            }
+            //console.log("Time counter is " + main_game.timeCounter);
+            clearInterval(main_game.timeCounter);
+            if(outcome) {
+                var current_player = self.parent.get_current_player();
+                self.symbol = current_player.get_symbol();
+                console.log('current player\'s symbol: '+self.symbol);
+                self.element.addClass('selected');
+                self.change_symbol(self.symbol);
+                self.parent.cell_clicked(self);
+                $("#answer").off("click");
+            }
+        });
+
+
     };
     this.change_symbol = function(symbol){
         self.element.text(symbol);
@@ -56,7 +87,7 @@ var cell_template = function(parent,counter){
 
 
 
-var game_template = function(main_element){
+var game_template = function(main_element,board_size){
     //console.log('game template constructor called');
     var self = this;
     this.element = main_element;
@@ -76,6 +107,11 @@ var game_template = function(main_element){
         [0,4,8],
         [2,4,6]
     ];
+    //console.log("Hard Coded Win Conditions", this.win_conditions);
+    this.win_conditions = calculateWinConditionArray(board_size);
+    //console.log("Board size is " + board_size);
+    //console.log("Dynamic Win Conditions", this.win_conditions);
+
     this.create_cells = function(cell_count){
         //console.log('game template create cells called');
         for(var i=0; i<cell_count; i++){
@@ -122,7 +158,6 @@ var game_template = function(main_element){
             //console.log('checking win conditions ',this.win_conditions);
 
             for(var j=0; j<this.win_conditions[i].length; j++){
-
                 if(this.cell_array[this.win_conditions[i][j]].get_symbol() == current_player_symbol){
                     console.log('symbols match');
                     count++;
@@ -162,7 +197,7 @@ var player_template = function(symbol, element){
 var main_game = null;
 $(document).ready(function(){
     apply_click_handlers()
-    main_game = new game_template($('#gamebody'));
+    main_game = new game_template($('#gamebody'),3);
     main_game.create_cells(9);
     main_game.create_players();
 });
@@ -177,7 +212,7 @@ function apply_click_handlers() {
         cell_width = cell_width + "%";
         console.log("Cell width is " + cell_width);
         $("#gamebody").html("");
-        main_game = new game_template($('#gamebody'));
+        main_game = new game_template($('#gamebody'),board_size);
         main_game.create_cells(board_size*board_size);
         main_game.create_players();
         $(".ttt_cell").css("width",cell_width);
@@ -187,13 +222,13 @@ function apply_click_handlers() {
 
 var count=5;
 function calltimer() {
-    this.counter=setInterval(timer, 1000); //1000 will  run it every 1 second
+    main_game.timeCounter=setInterval(timer, 1000); //1000 will  run it every 1 second
 }
 
 function timer() {
     count = count - 1;
     if (count <= 0) {
-        clearInterval(self.counter);
+        clearInterval(main_game.timeCounter);
         //counter ended, do something here
     }
     if (count === 0) {
@@ -297,9 +332,61 @@ var categoryArray=['4, 5, 4, 3, 2, 6, 3, 1, 8, 1, 5, 2, 8, 0, 0, 4, 6, 3, 0, 1, 
 
 
 
-var randomIndex = Math.floor(Math.random() * questionArray.length);
-console.log(questionArray[randomIndex]);
-console.log(questionArray[16]);
-console.log(answerArray[16]);
+// function for win condition dynamically
 
-// test
+function calculateWinConditionArray(row) {
+    console.log("row is " + row);
+    var win = [];
+    var wintotal = [];
+    row = parseInt(row);
+    for(var i = 0; i < row*row; i)
+    {
+        var temp = [];
+        for(var j=i; j<i+row; j++)
+        {
+            temp.push(j);
+        }
+        win.push(temp);
+        wintotal.push(temp);
+        i=j;
+
+    }
+
+    //console.log("horizontal",win);
+
+    var win = [];
+    for(var i=0;  i< row; i++)
+    {
+        temp = [];
+        for(j=i;j<row*row;j+=row)
+        {
+            temp.push(j);
+        }
+        win.push(temp);
+        wintotal.push(temp);
+    }
+
+    //console.log("vertical", win);
+
+    var win = [];
+    var temp = [];
+    for(var i=0;i<row*row;i+=row+1)
+    {
+        temp.push(i);
+
+    }
+    wintotal.push(temp);
+    //console.log("diagonal LR", temp);
+
+    var temp = [];
+    for(i=row-1;i<row*row-1;i+=row-1)
+    {
+        temp.push(i);
+    }
+    wintotal.push(temp);
+    //console.log("diagonal RL", temp);
+    //console.log("total", wintotal);
+    return wintotal;
+}
+
+
