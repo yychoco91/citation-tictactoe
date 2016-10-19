@@ -1,7 +1,7 @@
 /**
  * Created by danh on 10/18/16.
  */
-var cell_template = function(parent){
+var cell_template = function(parent,counter){
     var self = this;
     this.parent = parent;
     this.element = null;
@@ -10,15 +10,34 @@ var cell_template = function(parent){
         this.element = $("<div>",
             {
                 class:'ttt_cell',
-                html: '&nbsp;'
+                html: counter
             }
         ).click(this.cell_click);
         return this.element;
     };
+
     this.cell_click = function(){
         if(self.element.hasClass('selected')){
             return;
         }
+
+        var qdiv = $("<div>",{
+            html: questionArray[randomIndex]
+        });
+
+        // var q_array = [];
+        // for(i=0;i<=3;i++) {
+        //     q_array.push($("<div id='"+i+"'>").text(i));
+        // }
+        // q_array.join('');
+
+
+        calltimer();
+        count = 5; // this resets the counter
+        $("#question_area").html('');
+        $("#question_area").append(qdiv);
+        //$("#question_area").append(q_array);
+        $("#question_area").append(answerArray[randomIndex]);
         //console.log('this cell clicked',self.element);
         var current_player = self.parent.get_current_player();
         self.symbol = current_player.get_symbol();
@@ -60,7 +79,7 @@ var game_template = function(main_element){
     this.create_cells = function(cell_count){
         //console.log('game template create cells called');
         for(var i=0; i<cell_count; i++){
-            var cell = new cell_template(this);
+            var cell = new cell_template(this,i);
             var cell_element = cell.create_self();
             this.cell_array.push(cell);
             this.element.append(cell_element);
@@ -166,7 +185,26 @@ function apply_click_handlers() {
     });
 }
 
-function array(){
+var count=5;
+function calltimer() {
+    this.counter=setInterval(timer, 1000); //1000 will  run it every 1 second
+}
+
+function timer() {
+    count = count - 1;
+    if (count <= 0) {
+        clearInterval(self.counter);
+        //counter ended, do something here
+    }
+    if (count === 0) {
+        alert("TIME OVER");
+    }
+    //Do code for showing the number of seconds here
+    $("#timer h1").text(count);
+    console.log(count);
+}
+
+
 var questionArray=['Veronica Smith<br> Mr. Thornton<br> U.S. History – Per. 2 <br>10 Sept. 2016,  Is this proper MLA heading?',
     ' Are in-text citations the same thing as parenthetical citations?',
     'Does MLA 8 allow you to underline, italicize, or bold the title of your paper?',
@@ -227,9 +265,9 @@ var answerArray=['No. In your heading, the month should be spelled out (10 Septe
 
 var categoryArray=['citation format','source format', 'source type', 'MLA 8 format','in-text citations','works cited','web citations','quotes','library'];
 
-var index = Math.floor(Math.random() * questionArray.length);
-console.log(questionArray[index]);
+var randomIndex = Math.floor(Math.random() * questionArray.length);
+console.log(questionArray[randomIndex]);
 console.log(questionArray[16]);
 console.log(answerArray[16]);
 
-}
+// test
