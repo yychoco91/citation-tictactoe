@@ -55,7 +55,9 @@ var cell_template = function(parent,counter){
                 $("#answer").append(advice);
             } else {
                 console.log("They chose wrong");
-                console.log("Advice is ",advice);
+                console.log("Their answer is ",userChoice);
+                console.log("Correct answer is ",answerArray[randomIndex]);
+                //console.log("Advice is ",advice);
                 $("#answer").append(advice);
                 outcome = false;
             }
@@ -275,33 +277,33 @@ var questionArray=['Veronica Smith<br> Mr. Thornton<br> U.S. History – Per. 2 
     'What is the password to log into the library website?'
 ];
 
-var choicesArray=['Yes <br> No',
-    'Yes <br> No',
-    'Yes <br> No',
+var choicesArray=['Yes<br>No',
+    'Yes<br>No',
+    'Yes<br>No',
     '(a)Single-spaced, 12 pt. Arial font <br>(b)Double-spaced, 14 pt. Times New Roman font <br>(c)Double-spaced, 12 pt. Times New Roman font',
-    '(a) List them in the order that they appear in your paper <br>(b) List them in alphabetical (A to Z) order.',
-    '(a) Hanging indent <br>(b) block indent;',
+    '(a)List them in the order that they appear in your paper <br>(b)List them in alphabetical (A to Z) order.',
+    '(a)Hanging indent<br>(b)block indent;',
     '(a)Is considered plagiarism <br>(b)Should be block indented.',
-    '(a)When you directly quote someone or something <br>(b) When you interview someone and use something that they said <br>(c)When you use common knowledge – like ‘Water freezes at 32 degrees F’<br>(d)When you put a direct quote into your own words <br>(e)(a), (b), and (d) only. ',
-    '(a) Barnaby, Benjamin <br> (b) Yale UP (c) 2010 <br>(d)<em>Cool Science for Middle School Science Fairs </em> ',
+    '(a)When you directly quote someone or something <br>(b) When you interview someone and use something that they said <br>(c)When you use common knowledge – like ‘Water freezes at 32 degrees F’<br>(d)When you put a direct quote into your own words<br>(e)(a), (b), and (d) only.',
+    '(a)Barnaby, Benjamin <br> (b) Yale UP (c) 2010 <br>(d)<em>Cool Science for Middle School Science Fairs </em> ',
     '(a)A book on 20th Century Literature; <br>(b)A journal article in a database; <br>(c)A webpage',
     '(a)The Internet <br>(b)The index <br>(c)Your works cited document',
-    '(a) Webpage <br> (b)JSTOR journal article <br> (c) Magazine',
-    '(a) Routledge <br> (b) Jones,Andrew <br> (c)"The Cambrian Genocide" <br> (d) <em> Genocide:A Comprehenisve Introduction </em> <br> (e)2006 <br> (f) pp.40-60',
+    '(a)Webpage <br>(b)JSTOR journal article<br> (c) Magazine',
+    '(a)Routledge<br> (b) Jones,Andrew <br> (c)"The Cambrian Genocide" <br> (d) <em> Genocide:A Comprehenisve Introduction </em> <br> (e)2006 <br> (f) pp.40-60',
     '(a)The words et al. are a suffix to the author’s name; <br>(b)The words et al. mean ‘and others’, because there are more than three authors.<br>(c)The words et al. mean there are editors and authors for this book.',
     '(a)You only need to cite each source one time – no matter how often you use it;<br>(b)You should cite direct quotes at the end of the sentence where it is used.',
-    '(a)No, only your paper needs to have page numbers; <br> (b)Yes, your paper, works cited, and annotated bibliography should have a running page number from the beginning of the document to the end.',
+    '(a)No, only your paper needs to have page numbers; <br>(b)Yes, your paper, works cited, and annotated bibliography should have a running page number from the beginning of the document to the end.',
     '(a)On the same page right after the last paragraph of your paper;<br>(b)On page one of your document;<br>(c)On a separate page after your paper.',
     '(a)A TV show;<br>(b)A book;<br>(c)A journal;<br>(d)A website;<br>(e)A database;<br>(f)All of the above.',
     '(a)Baron, Sandra.<em>Yosemite National Park</em>. New York: Chelsea, 2010, pp. 2-10. <br>(b)Baron, Sandra.<em> Yosemite National Park</em>, Chelsea, 2010, pp. 2-10',
     '(a)Yes. That’s why the boxes are there. <br>(b)No. Only fill in the boxes necessary for the source you are citing.',
-    '(a)Ten spaces or two tabs <br> (b)Five spaces or one tab.',
+    '(a)Ten spaces or two tabs <br>(b)Five spaces or one tab.',
     '(a)No. URLs are long and messy and should never be included <br>(b)Yes! URLs are required by the new MLA 8 style.',
     '(a)Johnson, Betty. “Abstract Art.”<em> Modern Art – San Francisco</em>, 24 Jan. 2015, www.MASF.org/abstract_art.html. Accessed 11 Oct. 2015. <br> (b)Johnson, Betty. “Abstract Art.”<em> Modern Art – San Francisco</em>, 24 Jan. 2015, http://www.MASF.org/abstract_art.html. Accessed 11 Oct. 2015.',
     '(a)(239 Smith)<br>(b)(Smith, 239)<br>(c)(Smith, p. 239)<br>(d)(Smith 239)',
     '(a)Smith, John. “Modern World History.”<br> (b)Smith, John. “World History Overview.”',
     '(a)The webpage article title (which is in quotes)<br>(b)The publisher of the website;',
-    '(a)lions<br>(b)library <br>(c)JSerra'
+    '(a)lions<br>(b)library<br>(c)JSerra'
 ];
 
 var answerArray=['No',
@@ -312,7 +314,7 @@ var answerArray=['No',
     '(a)Hanging indent',
     '(b)Should be block indented.',
     '(e)(a), (b), and (d) only.',
-    '(d)<em>Cool Science for Middle School Science Fairs.</em> ',
+    '(d)<em>Cool Science for Middle School Science Fairs </em> ',
     '(c)A webpage',
     '(c)Your works cited document',
     '(b)JSTOR journal article',
@@ -325,19 +327,19 @@ var answerArray=['No',
     '(b)Baron, Sandra.<em> Yosemite National Park</em>, Chelsea, 2010, pp. 2-10',
     '(b)No. Only fill in the boxes necessary for the source you are citing.',
     '(b)Five spaces or one tab.',
-    '(b)Yes! URLs are now required by the new MLA 8 style.',
+    '(b)Yes! URLs are required by the new MLA 8 style.',
     '(a)Johnson, Betty. “Abstract Art.”<em> Modern Art – San Francisco</em>, 24 Jan. 2015, www.MASF.org/abstract_art.html. Accessed 11 Oct. 2015.',
     '(d)(Smith 239)',
-    '(a)Smith, John. “Modern World History.',
+    '(a)Smith, John. “Modern World History.”',
     '(a)The webpage article title (which is in quotes)',
     '(b)library'
 ];
 
-//var categoryArray=['citation format','source format', 'source type', 'MLA 8 format','in-text citations','works cited','web citations','quotes','library'];
-//var categoryArray=['citation format','citation source', 'source type', 'MLA 8 format','MLA 8 styles','in-text citations','works cited','web citations','citation style'];
-//var categoryArray=['4, 5, 4, 3, 6, 6, 8, 1,    '];
 
-//var categoryQuestions=[3, 4, 3, 3, 5, 5, 7, 5, 0, 2,4, 2, 0,0, 1, 3, 5, 3, 0, 1, 7, 6, 0, 4, 5, 4, 8 ];
+var categoryArray=['citation format','citation source', 'source format', 'MLA 8 format','MLA 8 style','in-text citations','works cited','web citations','citation style'];
+var categoryArray=['4, 5, 4, 3, 2, 6, 3, 1, 8, 1, 5, 2, 8, 0, 0, 4, 6, 3, 0, 1, 8 , 7, 7 , 5, 6, 7, 2'];
+
+
 
 // function for win condition dynamically
 
