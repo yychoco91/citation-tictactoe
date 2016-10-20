@@ -21,6 +21,7 @@ var cell_template = function(parent,counter){
             return;
         }
         var outcome = false;
+        //debugger;
         clearInterval(main_game.timeCounter);
         var randomIndex = Math.floor(Math.random() * questionArray.length);
         var cParse = choicesArray[randomIndex].split("<br>");
@@ -406,7 +407,7 @@ function calculateWinConditionArray(row) {
     }
     wintotal.push(temp);
     //console.log("diagonal RL", temp);
-    //console.log("total", wintotal);
+    console.log("total", wintotal);
     return wintotal;
 }
 
