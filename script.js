@@ -30,7 +30,7 @@ var cell_template = function(parent,counter){
         });
 
         calltimer();
-        count = 10; // this resets the counter
+        count = 30; // this resets the counter
         $("#question").html('');
         $("#answer").html('');
         $("#question").append(qdiv);
@@ -43,17 +43,20 @@ var cell_template = function(parent,counter){
             console.log("random is " + randomIndex);
             var userChoice = $(this).text();
 
-            var advice = $("<div>", {
-                class: "advice",
-                text: answerArray[randomIndex]
-            });
-
             if(userChoice === answerArray[randomIndex])
             {
+                var advice = $("<div>", {
+                    class: "green_advice",
+                    text: answerArray[randomIndex]
+                });
                 console.log("They chose the correct answer");
                 outcome = true;
                 $("#answer").append(advice);
             } else {
+                var advice = $("<div>", {
+                    class: "red_advice",
+                    text: answerArray[randomIndex]
+                });
                 console.log("They chose wrong");
                 console.log("Their answer is ",userChoice);
                 console.log("Correct answer is ",answerArray[randomIndex]);
@@ -86,7 +89,11 @@ var cell_template = function(parent,counter){
 
 
 
-var game_template = function(main_element,board_size){
+var game_template = function(main_element,board_size,win_size){
+    if (win_size === undefined)
+    {
+        win_size = 3;
+    }
     //console.log('game template constructor called');
     var self = this;
     this.element = main_element;
@@ -160,7 +167,8 @@ var game_template = function(main_element,board_size){
                 if(this.cell_array[this.win_conditions[i][j]].get_symbol() == current_player_symbol){
                     console.log('symbols match');
                     count++;
-                    if(count==3){
+                    if(count==win_size){
+                        clearInterval(main_game.timeCounter);
                         console.log('someone won'); this.player_wins(this.players[this.current_player]);
                     }//end of count == 3
                 } //end of symbols match
@@ -170,7 +178,9 @@ var game_template = function(main_element,board_size){
     };
     this.player_wins = function(player){
         console.log(player.get_symbol()+' won the game');
-        alert(player.get_symbol()+' won the game');
+        //alert(player.get_symbol()+' won the game');
+        $("#win").html(player.get_symbol()+ ' won the game!');
+        $("#win").show();
     };
 };
 
@@ -205,14 +215,15 @@ $(document).ready(function(){
 function apply_click_handlers() {
     $("#submit").click(function(){
         var board_size = $("#board_size option:selected").val();
-       console.log("board_size is ",board_size);
-
+        var win_size = $("#win_size option:selected").val();
+        console.log("board_size is ",board_size);
+        console.log("win_size is " , win_size);
         var cell_width = 100/board_size;
         cell_width = cell_width.toFixed(2);
         cell_width = cell_width + "%";
         console.log("Cell width is " + cell_width);
         $("#gamebody").html("");
-        main_game = new game_template($('#gamebody'),board_size);
+        main_game = new game_template($('#gamebody'),board_size,win_size);
         main_game.create_cells(board_size*board_size);
         main_game.create_players();
         $(".ttt_cell").css("width",cell_width);
@@ -226,6 +237,7 @@ function apply_click_handlers() {
         $('#timer').html("<h1>Timer</h1>");
         main_game.create_cells(9);
         main_game.create_players();
+        $("#win").hide();
     });
 }
 
