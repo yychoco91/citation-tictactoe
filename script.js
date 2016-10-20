@@ -216,6 +216,15 @@ function apply_click_handlers() {
         $(".ttt_cell").css("width",cell_width);
         $(".ttt_cell").css("height",cell_width);
     });
+    $('#reset_button').click(function() {
+        console.log ('reset button pushed');
+        $("#gamebody").html("");
+        $('#question_area').html('<div class="col-xs-12"><div id="question" class="col-xs-12"><h1>Question</h1></div><div id="answer"></div></div>');
+        clearInterval(main_game.timeCounter);
+        $('#timer').html("<h1>Timer</h1>");
+        main_game.create_cells(9);
+        main_game.create_players();
+    });
 }
 
 var count=5;
@@ -386,3 +395,4 @@ function calculateWinConditionArray(row) {
     //console.log("total", wintotal);
     return wintotal;
 }
+
