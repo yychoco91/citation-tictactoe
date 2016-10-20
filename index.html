@@ -39,6 +39,7 @@
         #stats_player_area {
             /*background-color: gray;*/
             height: 25vh;
+            font-family: 'Coda Caption', sans-serif;
         }
 
         #stats ul {
@@ -62,10 +63,16 @@
             border-radius: 90px;
             height: 100%;
             text-align: center;
+            font-family: 'Coda Caption', sans-serif;
+            color: black;
+            text-shadow: 3px 2px 0 white,
+            4px 3px 0 black;
         }
         #player_area {
             text-align: center;
             height:100%;
+            text-shadow: 1px 2px 0 white,
+            1px 2px 0 black;
         }
         #game_area {
             /*background-color: lightblue;*/
@@ -74,7 +81,7 @@
 
         }
         #question_area {
-            background-color: lightgreen;
+            /*background-color: lightgreen;*/
             height: 65vh;
             padding: 0;
             text-align: center;
@@ -92,18 +99,25 @@
             background-position: center;
             background-size: 60vh 60vh;
             text-align: center;
-            padding: 15px;
+            border: 15px;
+
             /*background-repeat: no-repeat;*/
             /*background-color: lavender;*/
 
         }
+
         .ttt_cell{
             width: 33%;
             box-sizing: border-box;
-            border: 1px solid black;
+            border: 2px solid black;
             height: 33%;
             display: inline-block;
-            font-size: initial;
+            font-size: 25px;
+            font-family: 'Coda Caption', sans-serif;
+            color: black;
+            text-shadow: 3px 2px 0 white,
+            4px 3px 0 black;
+
         }
 
         #players{
@@ -135,10 +149,14 @@
             transform: translate(-50%,-50%);
         }
         #question {
-            height: 18vh;
-            background-color: lavender;
-            border: solid black 1px;
+            height: 11vh;
+            background-color: #545454;
+            border: solid black 3px;
             margin: 0;
+            color: lightgray;
+            font-family: 'Coda Caption', sans-serif;
+            text-shadow: 3px 2px 0 black,
+            4px 3px 0 #545454;
         }
 
         .choices {
@@ -204,6 +222,7 @@
                     <option>12</option>
                 </select>
                 </div>
+                <br>
                 <div>
                     Select Win Size: <select name="win_size" id="win_size">
                     <option>3</option>
