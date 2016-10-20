@@ -228,7 +228,6 @@ var game_template = function(main_element,board_size,win_size){
                 if(this.cell_array[this.win_conditions[i][j]].get_symbol() == current_player_symbol){
                     console.log('symbols match');
                     count++;
-                    debugger;
                     if(count==win_size){
                         /*
                          Even though win size is customizable, it does not check if the matches
