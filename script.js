@@ -23,14 +23,11 @@ var cell_template = function(parent,counter){
         var outcome = false;
         clearInterval(main_game.timeCounter);
         var randomIndex = Math.floor(Math.random() * questionArray.length);
-        var qParse = questionArray[randomIndex].split("<br>");
+        var cParse = choicesArray[randomIndex].split("<br>");
+        //var qParse = questionArray[randomIndex];
         var qdiv = $("<div>",{
-            html: qParse[0]
+            html: questionArray[randomIndex]
         });
-
-        //console.log(qParse);
-        var qParseCombined = qParse.join("<br>");
-        //console.log(qParseCombined);
 
         calltimer();
         count = 10; // this resets the counter
@@ -38,8 +35,8 @@ var cell_template = function(parent,counter){
         $("#answer").html('');
         $("#question").append(qdiv);
         //$("#question_area").append(q_array);
-        for (var i = 1; i<qParse.length;i++) {
-            $("#answer").append("<div id='a"+i+"' class='choices'>" + qParse[i] + "</div>");
+        for (var i = 0; i<cParse.length;i++) {
+            $("#answer").append("<div id='a"+i+"' class='choices'>" + cParse[i] + "</div>");
         }
         $("#answer").off("click");
         $("#answer").on("click",".choices",function() {
@@ -51,14 +48,14 @@ var cell_template = function(parent,counter){
                 text: answerArray[randomIndex]
             });
 
-            if(userChoice === choiceArray[randomIndex])
+            if(userChoice === answerArray[randomIndex])
             {
                 console.log("They chose the correct answer");
                 outcome = true;
                 $("#answer").append(advice);
             } else {
                 console.log("They chose wrong");
-                //console.log("Advice is ",advice);
+                console.log("Advice is ",advice);
                 $("#answer").append(advice);
                 outcome = false;
             }
@@ -71,8 +68,8 @@ var cell_template = function(parent,counter){
                 self.element.addClass('selected');
                 self.change_symbol(self.symbol);
                 self.parent.cell_clicked(self);
-                $("#answer").off("click");
             }
+            $("#answer").off("click");
         });
 
 
@@ -196,7 +193,8 @@ var player_template = function(symbol, element){
 
 var main_game = null;
 $(document).ready(function(){
-    apply_click_handlers()
+
+    apply_click_handlers();
     main_game = new game_template($('#gamebody'),3);
     main_game.create_cells(9);
     main_game.create_players();
@@ -217,6 +215,15 @@ function apply_click_handlers() {
         main_game.create_players();
         $(".ttt_cell").css("width",cell_width);
         $(".ttt_cell").css("height",cell_width);
+    });
+    $('#reset_button').click(function() {
+        console.log ('reset button pushed');
+        $("#gamebody").html("");
+        $('#question_area').html('<div class="col-xs-12"><div id="question" class="col-xs-12"><h1>Question</h1></div><div id="answer"></div></div>');
+        clearInterval(main_game.timeCounter);
+        $('#timer').html("<h1>Timer</h1>");
+        main_game.create_cells(9);
+        main_game.create_players();
     });
 }
 
@@ -388,5 +395,4 @@ function calculateWinConditionArray(row) {
     //console.log("total", wintotal);
     return wintotal;
 }
-
 
