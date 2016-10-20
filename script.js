@@ -1,7 +1,7 @@
 /**
  * Created by danh on 10/18/16.
  */
-var cell_template = function(parent,counter){
+var cell_template = function(parent){
     var self = this;
     this.parent = parent;
     this.element = null;
@@ -10,27 +10,41 @@ var cell_template = function(parent,counter){
         this.element = $("<div>",
             {
                 class:'ttt_cell',
-                html: counter
+                html: "&nbsp;"
             }
         ).click(this.cell_click);
         return this.element;
     };
-
+    /*
+     This method has been heavily modified to start our question and timer for our
+     citation game.
+     */
     this.cell_click = function(){
         if(self.element.hasClass('selected')){
             return;
         }
-        var outcome = false;
-        clearInterval(main_game.timeCounter);
+        this.outcome = false; // our outcome is set to false as default
+        //debugger;
+        clearInterval(main_game.timeCounter); // stops the timer from counting down
         var randomIndex = Math.floor(Math.random() * questionArray.length);
+        /*
+         random generate a number between our question array length.
+         Afterwards, takes the same random index and look at the choices array
+         to take a string that will be split up via <br>
+         This array will then be looped through to insert individual dom answers divs
+         into our question section
+         */
         var cParse = choicesArray[randomIndex].split("<br>");
         //var qParse = questionArray[randomIndex];
         var qdiv = $("<div>",{
             html: questionArray[randomIndex]
         });
 
-        calltimer();
-        count = 10; // this resets the counter
+        calltimer(self); // call our timer to pressure the opponent!
+        count = 30; // this resets the counter
+        /*
+         Clear all of our question and answer div to prep our board area
+         */
         $("#question").html('');
         $("#answer").html('');
         $("#question").append(qdiv);
@@ -39,41 +53,82 @@ var cell_template = function(parent,counter){
             $("#answer").append("<div id='a"+i+"' class='choices'>" + cParse[i] + "</div>");
         }
         $("#answer").off("click");
+        /*
+         To reduce double click, this turns off any click events on our answers div.
+         This event handler grabs our users choice, takes the element and reads the
+         text.  After woulds it compares if their choices matches the answer array
+         by key index.  If matches assigns a green_advice class below.  If not matches
+         then it assigns a red_advice class.
+         */
         $("#answer").on("click",".choices",function() {
-            console.log("random is " + randomIndex);
+            //console.log("random is " + randomIndex);
             var userChoice = $(this).text();
-
-            var advice = $("<div>", {
-                class: "advice",
-                text: answerArray[randomIndex]
-            });
-
+            //debugger;
             if(userChoice === answerArray[randomIndex])
             {
-                console.log("They chose the correct answer");
-                outcome = true;
+                var advice = $("<div>", {
+                    class: "green_advice",
+                    text: answerArray[randomIndex]
+                });
+                //console.log("They chose the correct answer");
+                this.outcome = true;
                 $("#answer").append(advice);
             } else {
-                console.log("They chose wrong");
-                console.log("Advice is ",advice);
+                var advice = $("<div>", {
+                    class: "red_advice",
+                    text: answerArray[randomIndex]
+                });
+                //console.log("They chose wrong");
+                //console.log("Their answer is ",userChoice);
+                //console.log("Correct answer is ",answerArray[randomIndex]);
+                //console.log("Advice is ",advice);
                 $("#answer").append(advice);
-                outcome = false;
+                this.outcome = false;
             }
             //console.log("Time counter is " + main_game.timeCounter);
-            clearInterval(main_game.timeCounter);
-            if(outcome) {
+            clearInterval(main_game.timeCounter); // stops the timer again
+            $('#timer').html("<h1></h1>");
+            if(this.outcome) {
+                /*
+                 If outcome is true then assign the player symbol to the cell that was
+                 clicked on.
+                 */
+                //debugger;
                 var current_player = self.parent.get_current_player();
                 self.symbol = current_player.get_symbol();
                 console.log('current player\'s symbol: '+self.symbol);
                 self.element.addClass('selected');
                 self.change_symbol(self.symbol);
-                self.parent.cell_clicked(self);
+                self.parent.cell_clicked(self,1); // run win condition check
+            } else {
+                /*
+                 If outcome is false, calls function that does not assign a symbol,
+                 does not checks for win conditions and switches players.
+                 */
+                self.incorrectAnswerAndSwitch();
             }
             $("#answer").off("click");
         });
 
 
     };
+
+    this.incorrectAnswerAndSwitch = function() {
+        /*
+         This function runs just like a successful answer except does not add selected
+         class and symbol.
+         */
+        var current_player = self.parent.get_current_player();
+        self.symbol = current_player.get_symbol();
+        console.log('current player\'s symbol: '+self.symbol);
+        //self.element.addClass('selected');
+        /*
+         It also runs this cell clicked function with a 2nd parameter of false, make it
+         so win condition does not gets check and added to our count
+         */
+        self.parent.cell_clicked(self,0);
+    };
+
     this.change_symbol = function(symbol){
         self.element.text(symbol);
     };
@@ -82,9 +137,15 @@ var cell_template = function(parent,counter){
     };
 };
 
-
-
-var game_template = function(main_element,board_size){
+/*
+ This function now accepts 3 parameters, the 2nd is for board size and the 3rd is the
+ win condition
+ */
+var game_template = function(main_element,board_size,win_size){
+    if (win_size === undefined)
+    {
+        win_size = 3;
+    }
     //console.log('game template constructor called');
     var self = this;
     this.element = main_element;
@@ -104,10 +165,12 @@ var game_template = function(main_element,board_size){
         [0,4,8],
         [2,4,6]
     ];
-    //console.log("Hard Coded Win Conditions", this.win_conditions);
+
+    /*
+     Hard coded win condition is overwritten with a function that dynamically generates
+     the win conditions based on the user selected board size.
+     */
     this.win_conditions = calculateWinConditionArray(board_size);
-    //console.log("Board size is " + board_size);
-    //console.log("Dynamic Win Conditions", this.win_conditions);
 
     this.create_cells = function(cell_count){
         //console.log('game template create cells called');
@@ -138,8 +201,15 @@ var game_template = function(main_element,board_size){
         //console.log('current player is ',this.players);
         return this.players[this.current_player];
     };
-    this.cell_clicked = function(clicked_cell){
-        self.check_win_conditions();
+    this.cell_clicked = function(clicked_cell,nocheck){
+        /*
+         when 2nd param passed, do not check win condition so that the match
+         counter does not move up!
+         */
+        if(nocheck)
+        {
+            self.check_win_conditions();
+        }
         self.players[self.current_player].deactivate_player();
         self.switch_players();
         self.players[self.current_player].activate_player();
@@ -158,7 +228,13 @@ var game_template = function(main_element,board_size){
                 if(this.cell_array[this.win_conditions[i][j]].get_symbol() == current_player_symbol){
                     console.log('symbols match');
                     count++;
-                    if(count==3){
+                    debugger;
+                    if(count==win_size){
+                        /*
+                         Even though win size is customizable, it does not check if the matches
+                         were consecutive, we can have a win where X X O X is a win :(
+                         */
+                        clearInterval(main_game.timeCounter); // stop the timer in event of win
                         console.log('someone won'); this.player_wins(this.players[this.current_player]);
                     }//end of count == 3
                 } //end of symbols match
@@ -168,7 +244,13 @@ var game_template = function(main_element,board_size){
     };
     this.player_wins = function(player){
         console.log(player.get_symbol()+' won the game');
-        alert(player.get_symbol()+' won the game');
+        //alert(player.get_symbol()+' won the game');
+
+        /*
+         Show out custom win message popup! No more alerts!
+         */
+        $("#win").html(player.get_symbol()+ ' won the game!');
+        $("#win").show();
     };
 };
 
@@ -199,53 +281,90 @@ $(document).ready(function(){
     main_game.create_cells(9);
     main_game.create_players();
 });
-
+/*
+ This function are out custom click handlers.  This one is for the submit button.
+ On submit, it collects the values of our select pulldown menus and stores them in
+ variables that would pass into our instantiated object via parameters.
+ It also does some calculation so that the CSS width and height would be adjusted
+ accordingly.
+ */
 function apply_click_handlers() {
     $("#submit").click(function(){
         var board_size = $("#board_size option:selected").val();
-       console.log("board_size is ",board_size);
-
+        var win_size = $("#win_size option:selected").val();
+        console.log("board_size is ",board_size);
+        console.log("win_size is " , win_size);
         var cell_width = 100/board_size;
-        cell_width = cell_width.toFixed(2);
+        cell_width = cell_width.toFixed(3);
         cell_width = cell_width + "%";
         console.log("Cell width is " + cell_width);
         $("#gamebody").html("");
-        main_game = new game_template($('#gamebody'),board_size);
+        main_game = new game_template($('#gamebody'),board_size,win_size);
         main_game.create_cells(board_size*board_size);
         main_game.create_players();
         $(".ttt_cell").css("width",cell_width);
         $(".ttt_cell").css("height",cell_width);
     });
+
+    /*
+     Our reset button removes active_player if it's on player2
+     It clears the gamebody, question_area and timer to default.
+     It invokes our main_game object methods and recreates our players and cells again
+     */
     $('#reset_button').click(function() {
         console.log ('reset button pushed');
+        $("#player2").removeClass('active_player');
         $("#gamebody").html("");
         $('#question_area').html('<div class="col-xs-12"><div id="question" class="col-xs-12"><h1>Question</h1></div><div id="answer"></div></div>');
         clearInterval(main_game.timeCounter);
-        $('#timer').html('');
+        $('#timer').html("<h1>Timer</h1>");
+        main_game = new game_template($('#gamebody'),3,3);
         main_game.create_cells(9);
         main_game.create_players();
+        $("#win").hide();
     });
 }
 
-var count=5;
-function calltimer() {
-    main_game.timeCounter=setInterval(timer, 1000); //1000 will  run it every 1 second
-}
+var count=30;
+/*
+ this timer gets called outside of our object but it's reference is passed into this
+ function as a parameter so that we can call methods to current player and append
+ the timer message for that specific person.
+ */
+function calltimer(that) {
+    main_game.timeCounter=setInterval(function(){
 
-function timer() {
-    count = count - 1;
-    if (count <= 0) {
-        clearInterval(main_game.timeCounter);
-        //counter ended, do something here
-    }
-    if (count === 0) {
-        alert("TIME OVER");
-    }
-    //Do code for showing the number of seconds here
-    $("#timer h1").text(count);
-    console.log(count);
-}
+        count = count - 1;
+        if (count <= 0) {
+            clearInterval(main_game.timeCounter);
+            //counter ended, do something here
+        }
+        if (count === 0) {
+            /*
+             If our count hits 0 then show the time up popup message
+             */
+            //main_game.invokeTimerSwitch = true;
+            var player_symbol = that.parent.get_current_player().get_symbol();
+            $("#win").html("Player " + player_symbol + '\'s time is up! Click for next player turn');
+            $("#win").show();
+            $("#win").click(function(){
+                $(this).hide();
+                that.incorrectAnswerAndSwitch();
+            });
+        }
+        /*
+         As long as the timer is not 0, update our timer div with the current count
+         */
+        $("#timer h1").text(count);
+        console.log(count);
 
+    }, 1000); //1000 will  run it every 1 second
+}
+/*
+ There are 3 arrays.  One for question, choices and answers.  Their subindex means they
+ are all grouped today. Choices aways will be delimited by <br> to separate into separate
+ divs later on in the logic and dynamically inserted into the dom.
+ */
 var questionArray=['Veronica Smith<br> Mr. Thornton<br> U.S. History – Per. 2 <br>10 Sept. 2016,  Is this proper MLA heading?',
     ' Are in-text citations the same thing as parenthetical citations?',
     'Does MLA 8 allow you to underline, italicize, or bold the title of your paper?',
@@ -275,33 +394,33 @@ var questionArray=['Veronica Smith<br> Mr. Thornton<br> U.S. History – Per. 2 
     'What is the password to log into the library website?'
 ];
 
-var choicesArray=['Yes <br> No',
-    'Yes <br> No',
-    'Yes <br> No',
+var choicesArray=['Yes<br>No',
+    'Yes<br>No',
+    'Yes<br>No',
     '(a)Single-spaced, 12 pt. Arial font <br>(b)Double-spaced, 14 pt. Times New Roman font <br>(c)Double-spaced, 12 pt. Times New Roman font',
-    '(a) List them in the order that they appear in your paper <br>(b) List them in alphabetical (A to Z) order.',
-    '(a) Hanging indent <br>(b) block indent;',
+    '(a)List them in the order that they appear in your paper <br>(b)List them in alphabetical (A to Z) order.',
+    '(a)Hanging indent<br>(b)block indent;',
     '(a)Is considered plagiarism <br>(b)Should be block indented.',
-    '(a)When you directly quote someone or something <br>(b) When you interview someone and use something that they said <br>(c)When you use common knowledge – like ‘Water freezes at 32 degrees F’<br>(d)When you put a direct quote into your own words <br>(e)(a), (b), and (d) only. ',
-    '(a) Barnaby, Benjamin <br> (b) Yale UP (c) 2010 <br>(d)<em>Cool Science for Middle School Science Fairs </em> ',
+    '(a)When you directly quote someone or something <br>(b) When you interview someone and use something that they said <br>(c)When you use common knowledge – like ‘Water freezes at 32 degrees F’<br>(d)When you put a direct quote into your own words<br>(e)(a), (b), and (d) only.',
+    '(a)Barnaby, Benjamin <br> (b) Yale UP (c) 2010 <br>(d) Cool Science for Middle School Science Fairs',
     '(a)A book on 20th Century Literature; <br>(b)A journal article in a database; <br>(c)A webpage',
     '(a)The Internet <br>(b)The index <br>(c)Your works cited document',
-    '(a) Webpage <br> (b)JSTOR journal article <br> (c) Magazine',
-    '(a) Routledge <br> (b) Jones,Andrew <br> (c)"The Cambrian Genocide" <br> (d) <em> Genocide:A Comprehenisve Introduction </em> <br> (e)2006 <br> (f) pp.40-60',
+    '(a)Webpage <br>(b)JSTOR journal article<br> (c) Magazine',
+    '(a)Routledge<br> (b) Jones,Andrew <br> (c)"The Cambrian Genocide" <br> (d) <em> Genocide:A Comprehenisve Introduction </em> <br> (e)2006 <br> (f) pp.40-60',
     '(a)The words et al. are a suffix to the author’s name; <br>(b)The words et al. mean ‘and others’, because there are more than three authors.<br>(c)The words et al. mean there are editors and authors for this book.',
     '(a)You only need to cite each source one time – no matter how often you use it;<br>(b)You should cite direct quotes at the end of the sentence where it is used.',
-    '(a)No, only your paper needs to have page numbers; <br> (b)Yes, your paper, works cited, and annotated bibliography should have a running page number from the beginning of the document to the end.',
+    '(a)No, only your paper needs to have page numbers; <br>(b)Yes, your paper, works cited, and annotated bibliography should have a running page number from the beginning of the document to the end.',
     '(a)On the same page right after the last paragraph of your paper;<br>(b)On page one of your document;<br>(c)On a separate page after your paper.',
     '(a)A TV show;<br>(b)A book;<br>(c)A journal;<br>(d)A website;<br>(e)A database;<br>(f)All of the above.',
     '(a)Baron, Sandra.<em>Yosemite National Park</em>. New York: Chelsea, 2010, pp. 2-10. <br>(b)Baron, Sandra.<em> Yosemite National Park</em>, Chelsea, 2010, pp. 2-10',
     '(a)Yes. That’s why the boxes are there. <br>(b)No. Only fill in the boxes necessary for the source you are citing.',
-    '(a)Ten spaces or two tabs <br> (b)Five spaces or one tab.',
+    '(a)Ten spaces or two tabs <br>(b)Five spaces or one tab.',
     '(a)No. URLs are long and messy and should never be included <br>(b)Yes! URLs are required by the new MLA 8 style.',
     '(a)Johnson, Betty. “Abstract Art.”<em> Modern Art – San Francisco</em>, 24 Jan. 2015, www.MASF.org/abstract_art.html. Accessed 11 Oct. 2015. <br> (b)Johnson, Betty. “Abstract Art.”<em> Modern Art – San Francisco</em>, 24 Jan. 2015, http://www.MASF.org/abstract_art.html. Accessed 11 Oct. 2015.',
     '(a)(239 Smith)<br>(b)(Smith, 239)<br>(c)(Smith, p. 239)<br>(d)(Smith 239)',
     '(a)Smith, John. “Modern World History.”<br> (b)Smith, John. “World History Overview.”',
     '(a)The webpage article title (which is in quotes)<br>(b)The publisher of the website;',
-    '(a)lions<br>(b)library <br>(c)JSerra'
+    '(a)lions<br>(b)library<br>(c)JSerra'
 ];
 
 var answerArray=['No',
@@ -312,7 +431,7 @@ var answerArray=['No',
     '(a)Hanging indent',
     '(b)Should be block indented.',
     '(e)(a), (b), and (d) only.',
-    '(d)<em>Cool Science for Middle School Science Fairs.</em> ',
+    '(d) Cool Science for Middle School Science Fairs',
     '(c)A webpage',
     '(c)Your works cited document',
     '(b)JSTOR journal article',
@@ -322,30 +441,36 @@ var answerArray=['No',
     '(b)Yes, your paper, works cited, and annotated bibliography should have a running page number from the beginning of the document to the end.',
     '(c)On a separate page after your paper.',
     '(f)All of the above.',
-    '(b)Baron, Sandra.<em> Yosemite National Park</em>, Chelsea, 2010, pp. 2-10',
+    '(b)Baron, Sandra.Yosemite National Park, Chelsea, 2010, pp. 2-10',
     '(b)No. Only fill in the boxes necessary for the source you are citing.',
     '(b)Five spaces or one tab.',
-    '(b)Yes! URLs are now required by the new MLA 8 style.',
-    '(a)Johnson, Betty. “Abstract Art.”<em> Modern Art – San Francisco</em>, 24 Jan. 2015, www.MASF.org/abstract_art.html. Accessed 11 Oct. 2015.',
+    '(b)Yes! URLs are required by the new MLA 8 style.',
+    '(a)Johnson, Betty. “Abstract Art.”Modern Art – San Francisco, 24 Jan. 2015, www.MASF.org/abstract_art.html. Accessed 11 Oct. 2015.',
     '(d)(Smith 239)',
-    '(a)Smith, John. “Modern World History.',
+    '(a)Smith, John. “Modern World History.”',
     '(a)The webpage article title (which is in quotes)',
     '(b)library'
 ];
 
-//var categoryArray=['citation format','source format', 'source type', 'MLA 8 format','in-text citations','works cited','web citations','quotes','library'];
-//var categoryArray=['citation format','citation source', 'source type', 'MLA 8 format','MLA 8 styles','in-text citations','works cited','web citations','citation style'];
-//var categoryArray=['4, 5, 4, 3, 6, 6, 8, 1,    '];
 
-//var categoryQuestions=[3, 4, 3, 3, 5, 5, 7, 5, 0, 2,4, 2, 0,0, 1, 3, 5, 3, 0, 1, 7, 6, 0, 4, 5, 4, 8 ];
+var categoryArray=['citation format','citation source', 'source format', 'MLA 8 format','MLA 8 style','in-text citations','works cited','web citations','citation style'];
+var categoryArray=['4, 5, 4, 3, 2, 6, 3, 1, 8, 1, 5, 2, 8, 0, 0, 4, 6, 3, 0, 1, 8 , 7, 7 , 5, 6, 7, 2'];
 
-// function for win condition dynamically
 
+
+/*
+ This function runs 4 loops with subloops to calculate
+ 1) Horizontal win conditions
+ 2) Vertical win conditions
+ 3) Diagonal from left to right
+ 4) Diagonal from right to left
+ */
 function calculateWinConditionArray(row) {
-    console.log("row is " + row);
+    //console.log("row is " + row);
     var win = [];
     var wintotal = [];
     row = parseInt(row);
+    /* horizontal win array generator */
     for(var i = 0; i < row*row; i)
     {
         var temp = [];
@@ -359,8 +484,7 @@ function calculateWinConditionArray(row) {
 
     }
 
-    //console.log("horizontal",win);
-
+    /* vertical win array generator */
     var win = [];
     for(var i=0;  i< row; i++)
     {
@@ -372,7 +496,6 @@ function calculateWinConditionArray(row) {
         win.push(temp);
         wintotal.push(temp);
     }
-
     //console.log("vertical", win);
 
     var win = [];
@@ -395,4 +518,3 @@ function calculateWinConditionArray(row) {
     //console.log("total", wintotal);
     return wintotal;
 }
-
