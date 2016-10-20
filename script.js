@@ -223,10 +223,10 @@ var game_template = function(main_element,board_size,win_size){
 
             var count=0;
             //console.log('checking win conditions ',this.win_conditions);
-
+            //console.log('cell array is',this.cell_array);
             for(var j=0; j<this.win_conditions[i].length; j++){
                 if(this.cell_array[this.win_conditions[i][j]].get_symbol() == current_player_symbol){
-                    console.log('symbols match');
+                    console.log(i + " " + j + ' ' + current_player_symbol + ' symbols match');
                     count++;
                     if(count==win_size){
                         /*
