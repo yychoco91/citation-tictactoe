@@ -10,7 +10,7 @@ var cell_template = function(parent,counter){
         this.element = $("<div>",
             {
                 class:'ttt_cell',
-                html: counter
+                html: "&nbsp;"
             }
         ).click(this.cell_click);
         return this.element;
