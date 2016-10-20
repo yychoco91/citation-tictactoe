@@ -221,7 +221,7 @@ function apply_click_handlers() {
         $("#gamebody").html("");
         $('#question_area').html('<div class="col-xs-12"><div id="question" class="col-xs-12"><h1>Question</h1></div><div id="answer"></div></div>');
         clearInterval(main_game.timeCounter);
-        $('#timer').html("<h1>Timer</h1>");
+        $('#timer').html('');
         main_game.create_cells(9);
         main_game.create_players();
     });
