@@ -2,17 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tic Tac Toe</title>
+    <title id="title">Tic Tac Toe</title>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Coda+Caption:800" rel="stylesheet">
     <style>
+
+
         #header {
             text-align: center;
-            background-color: lavender;
+
+            /*background-color: lavender;*/
             height: 10vh;
+            font-family: 'Coda Caption', sans-serif;
+            color: black;
+            text-shadow: 3px 2px 0 white,
+            4px 3px 0 black;
+        }
+
+        body {
+            background-image: url("assets/background_images/8.maxresdefault.jpg");
+            background-position: center;
+            font-family: 'Coda Caption', sans-serif;
+            color:black;
+            background-repeat: no-repeat;
+            background-size: cover;
+            /*position: absolute;*/
+            /*background-size: contain;*/
+
+            background-color: lightcyan;
+            height: 10vh;
+
+
+
         }
 
         #stats_player_area {
-            background-color: gray;
+            /*background-color: gray;*/
             height: 25vh;
         }
 
@@ -26,6 +51,8 @@
         #stats {
             height: 100%;
             border: solid black 1px;
+            text-shadow: 1px 2px 0 white,
+            1px 2px 0 black;
         }
         h3 {
             margin: 0;
@@ -41,20 +68,33 @@
             height:100%;
         }
         #game_area {
-            background-color: lightblue;
+            /*background-color: lightblue;*/
             border: solid black 1px;
             height: 65vh;
+
         }
         #question_area {
             background-color: lightgreen;
             height: 65vh;
             padding: 0;
+            text-align: center;
+            /*background-image: url("assets/background_images/12.questionsThing.jpg");*/
+            /*background-position: center;*/
+            /*background-size: 65vh;*/
+            /*text-align: center;*/
+
         }
 
         #gamebody{
             height: 60vh;
             width: 60vh;
-            background-color: lavender;
+            background-image: url("assets/background_images/11.anotherBoard.jpg");
+            background-position: center;
+            background-size: 60vh 60vh;
+            text-align: center;
+            padding: 15px;
+            /*background-repeat: no-repeat;*/
+            /*background-color: lavender;*/
 
         }
         .ttt_cell{
@@ -67,7 +107,7 @@
         }
 
         #players{
-            background-color: lavender;
+            /*background-color: lavender;*/
             height: 20%;
             width: 100%;
         }
@@ -86,7 +126,7 @@
         }
 
         .active_player{
-            background-color: red;
+            /*background-color: red;*/
         }
         #selectarea {
             position: absolute;
@@ -124,10 +164,11 @@
 </head>
 <body>
 <div>
+    <!--Game title-->
     <div id="header" class="col-xs-12">
         <h1>Tic-Tac-Toe</h1>
     </div>
-
+    <!--Stats list to display score, games played, proficiency and reset game-->
     <div id="stats_player_area" class="col-xs-12">
         <div id="stats" class="col-xs-2">
             <ul>
@@ -139,9 +180,10 @@
                 <li>Category Proficiency</li>
                 <p class="value"></p>
                 <br>
-                <li><button>Reset</button></li>
+                <li><button id="reset_button">Reset</button></li>
             </ul>
         </div>
+        <!--main tictactoe game area for player 1 and 2-->
         <div id="player_area" class="col-xs-8">
             <div id="players">
                 <div class="player_indicator" id="player1"><span>X</span></div>
@@ -177,6 +219,7 @@
                 </select>
 
                 </div>
+                <!--submit button for win size-->
                 <div>
                     <button id="submit">Submit</button>
                 </div>
