@@ -236,7 +236,10 @@ var game_template = function(main_element,board_size,win_size){
                         clearInterval(main_game.timeCounter); // stop the timer in event of win
                         console.log('someone won'); this.player_wins(this.players[this.current_player]);
                     }//end of count == 3
-                } //end of symbols match
+
+                } else { //if symbols don't match consecutively reset count to zero
+                    count = 0;
+                }//end of symbols match
             } //end of inner loop
         } //end of outer loop
         //TODO check conditions
