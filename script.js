@@ -297,6 +297,9 @@ $(document).ready(function(){
  */
 function apply_click_handlers() {
     $("#submit").click(function(){
+        clearInterval(main_game.timeCounter);
+        clear_all();
+
         var board_size = $("#board_size option:selected").val();
         var win_size = $("#win_size option:selected").val();
         console.log("board_size is ",board_size);
@@ -322,19 +325,7 @@ function apply_click_handlers() {
      It invokes our main_game object methods and recreates our players and cells again
      */
     $('#reset_button').click(function() {
-        //console.log ('reset button pushed');
-        //$("#games_played").text(main_game.games_played);
-        //$("#accuracy").text(this.matches / self.times_click)
-        $("#player2").removeClass('active_player');
-        $("#gamebody").html("");
-        $('#question_area').html('<div id="question"><h1>Question</h1></div><div id="answer"></div>');
-        clearInterval(main_game.timeCounter);
-        $('#timer').html("<span>Timer</span>");
-        main_game = new game_template($('#gamebody'),3,3);
-        main_game.create_cells(9);
-        main_game.create_players();
-        $("#win").hide();
-        $("#reset_button").removeClass('blink_me');
+        clear_all();
     });
 
     $("#settings").click(function() {
@@ -345,6 +336,12 @@ function apply_click_handlers() {
                 $("#settings_windows").css("opacity","1");
             });
         }
+    });
+
+    $("#settings_close").click(function() {
+        $("#settings_window").hide(function(){
+            $("body.container>div").css("opacity","1");
+        });
     });
 
     $("#board_size").on("change",function() {
@@ -363,6 +360,20 @@ function apply_click_handlers() {
     });
 
 }
+
+function clear_all() {
+    $("#player2").removeClass('active_player');
+    $("#gamebody").html("");
+    $('#question_area').html('<div id="question"><h1>Question</h1></div><div id="answer"></div>');
+    clearInterval(main_game.timeCounter);
+    $('#timer').html("<span>Timer</span>");
+    main_game = new game_template($('#gamebody'),3,3);
+    main_game.create_cells(9);
+    main_game.create_players();
+    $("#win").hide();
+    $("#reset_button").removeClass('blink_me');
+}
+
 
 var count=30;
 /*
