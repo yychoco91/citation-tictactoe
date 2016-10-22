@@ -41,7 +41,7 @@ citation game.
         });
 
         calltimer(self); // call our timer to pressure the opponent!
-        count = 30; // this resets the counter
+        count = 20; // this resets the counter
         /*
         Clear all of our question and answer div to prep our board area
          */
@@ -323,7 +323,7 @@ function apply_click_handlers() {
     });
 }
 
-var count=30;
+var count=20;
 /*
 this timer gets called outside of our object but it's reference is passed into this
 function as a parameter so that we can call methods to current player and append
@@ -331,6 +331,8 @@ the timer message for that specific person.
  */
 function calltimer(that) {
     main_game.timeCounter=setInterval(function(){
+    $("#start_clock").removeClass("timer_no_start").addClass("timer");
+    $("#start_mask").removeClass("mask_no_start").addClass("mask");
 
         count = count - 1;
         if (count <= 0) {
@@ -349,11 +351,14 @@ function calltimer(that) {
                 $(this).hide();
                 that.incorrectAnswerAndSwitch();
             });
+
+            $("#start_clock").addClass("timer_no_start").removeClass("timer");
+            $("#start_mask").addClass("mask_no_start").removeClass("mask");
         }
         /*
         As long as the timer is not 0, update our timer div with the current count
          */
-        $("#timer h1").text(count);
+        $("#time h1").text(count);
         console.log(count);
 
     }, 1000); //1000 will  run it every 1 second
