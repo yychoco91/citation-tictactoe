@@ -41,7 +41,8 @@ var cell_template = function(parent){
         });
 
         calltimer(self); // call our timer to pressure the opponent!
-        count = 20; // this resets the counter
+        count = 30; // this resets the counter
+        $("#timer span").text(count);
         /*
          Clear all of our question and answer div to prep our board area
          */
@@ -87,7 +88,7 @@ var cell_template = function(parent){
             }
             //console.log("Time counter is " + main_game.timeCounter);
             clearInterval(main_game.timeCounter); // stops the timer again
-            $('#timer').html("<h1></h1>");
+            $('#timer').html("<span></span>");
             if(this.outcome) {
                 /*
                  If outcome is true then assign the player symbol to the cell that was
@@ -319,9 +320,9 @@ function apply_click_handlers() {
         //$("#accuracy").text(this.matches / self.times_click)
         $("#player2").removeClass('active_player');
         $("#gamebody").html("");
-        $('#question_area').html('<div class="col-xs-12"><div id="question" class="col-xs-12"><h1>Question</h1></div><div id="answer"></div></div>');
+        $('#question_area').html('<div id="question"><h1>Question</h1></div><div id="answer"></div>');
         clearInterval(main_game.timeCounter);
-        $('#timer').html("<h1>Timer</h1>");
+        $('#timer').html("<span>Timer</span>");
         main_game = new game_template($('#gamebody'),3,3);
         main_game.create_cells(9);
         main_game.create_players();
@@ -329,7 +330,7 @@ function apply_click_handlers() {
     });
 }
 
-var count=20;
+var count=30;
 /*
  this timer gets called outside of our object but it's reference is passed into this
  function as a parameter so that we can call methods to current player and append
@@ -339,6 +340,7 @@ function calltimer(that) {
     main_game.timeCounter=setInterval(function(){
     $("#start_clock").removeClass("timer_no_start").addClass("timer");
     $("#start_mask").removeClass("mask_no_start").addClass("mask");
+
 
         count = count - 1;
         if (count <= 0) {
@@ -364,7 +366,7 @@ function calltimer(that) {
         /*
          As long as the timer is not 0, update our timer div with the current count
          */
-        $("#time h1").text(count);
+        $("#timer span").text(count);
         console.log(count);
 
     }, 1000); //1000 will  run it every 1 second
