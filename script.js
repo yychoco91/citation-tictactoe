@@ -315,6 +315,8 @@ function apply_click_handlers() {
      */
     $('#reset_button').click(function() {
         console.log ('reset button pushed');
+        //$("#games_played").text(main_game.games_played);
+        //$("#accuracy").text(this.matches / self.times_click)
         $("#player2").removeClass('active_player');
         $("#gamebody").html("");
         $('#question_area').html('<div class="col-xs-12"><div id="question" class="col-xs-12"><h1>Question</h1></div><div id="answer"></div></div>');
