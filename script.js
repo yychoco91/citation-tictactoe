@@ -1,6 +1,11 @@
 /**
  * Created by danh on 10/18/16.
  */
+
+var games_played = null;
+var player_x_wins = null;
+var player_o_wins = null;
+
 var cell_template = function(parent){
     var self = this;
     this.parent = parent;
@@ -29,11 +34,11 @@ var cell_template = function(parent){
         $("#temp_placeholder").remove();
 
         var current_player = self.parent.get_current_player();
-        self.symbol = current_player.get_symbol();
-        self.add_temp_placeholder(self.symbol);
+        //self.symbol = current_player.get_symbol();
+        self.add_temp_placeholder(current_player.get_symbol());
 
         clearInterval(main_game.timeCounter); // stops the timer from counting down
-        var randomIndex = Math.floor(Math.random() * questionArray.length);
+        var randomIndex = Math.floor(Math.random() * (questionArray.length + 1));
         /*
          random generate a number between our question array length.
          Afterwards, takes the same random index and look at the choices array
@@ -78,6 +83,9 @@ var cell_template = function(parent){
             {
                 console.log($(this));
                 $(this).addClass('green_advice');
+                var coins = new Audio('assets/sounds/coins.mp3');
+                coins.volume = 0.2;
+                coins.play();
                 // var advice = $("<div>", {
                 //     class: "green_advice",
                 //     text: answerArray[randomIndex]
@@ -91,7 +99,7 @@ var cell_template = function(parent){
                 //     $('.choices:eq('+i+')').hide(i*500);
                 //
                 // }
-            } else {
+            } else { // When the user click on the wrong answer
                 console.log($(this));
                 $(this).addClass('red_advice');
                 var advice = $("<div>", {
@@ -107,6 +115,9 @@ var cell_template = function(parent){
                 // }
                 // $(".choices").hide(1000);
                 $("#answer").append(advice);
+                var wrong = new Audio('assets/sounds/wrong.mp3');
+                //wrong.volume = 0.2;
+                wrong.play();
                 this.outcome = false;
             }
 
@@ -142,14 +153,6 @@ var cell_template = function(parent){
         /*
          This function runs just like a successful answer except does not add selected
          class and symbol.
-         */
-        var current_player = self.parent.get_current_player();
-        self.symbol = current_player.get_symbol();
-        console.log('current player\'s symbol: '+self.symbol);
-        //self.element.addClass('selected');
-        /*
-         It also runs this cell clicked function with a 2nd parameter of false, make it
-         so win condition does not gets check and added to our count
          */
         self.parent.cell_clicked(self,0);
     };
@@ -273,6 +276,16 @@ var game_template = function(main_element,board_size,win_size){
         self.switch_players();
         self.players[self.current_player].activate_player();
 
+        console.log("how many cells " + this.cell_array.length);
+        this.total_cell = this.cell_array.length;
+        console.log("how many selected cells ", $(".selected").length);
+
+        this.total_selected = $(".inside_ttt").length;
+        if (this.total_cell === this.total_selected) {
+            console.log("TIE!");
+            this.callTie();
+        }
+
     };
     this.check_win_conditions = function(){
         //console.log('check win conditions called');
@@ -283,19 +296,29 @@ var game_template = function(main_element,board_size,win_size){
             var count=0;
             //console.log('checking win conditions ',this.win_conditions);
             //console.log('cell array is',this.cell_array);
+            this.applause = false;
             for(var j=0; j<this.win_conditions[i].length; j++){
                 if(this.cell_array[this.win_conditions[i][j]].get_symbol() == current_player_symbol){
                     count++;
-                    console.log(current_player_symbol + " " + " " + j + " win count is " + count);
+                    //console.log("Player " + current_player_symbol + ", i is: " + i + ",j is: " + j + " win count is " + count + ", on Win : "+ this.win_conditions[i][j]);
                     if(count==win_size){
                         /*
                          Even though win size is customizable, it does not check if the matches
                          were consecutive, we can have a win where X X O X is a win :(
                          */
                         clearInterval(main_game.timeCounter); // stop the timer in event of win
-                        console.log('someone won'); this.player_wins(this.players[this.current_player]);
+                        console.log('someone won');
+                        this.player_wins(this.players[this.current_player]);
                         // TODO Here is where you increment the object properties for the winner
-                    }//end of count == 3
+                        if(!this.applause)
+                        {
+                            var applause = new Audio('assets/sounds/applause.mp3');
+                            applause.play();
+                            this.applause = true;
+                        }
+
+
+                    } //end of count == 3
 
                 } else { //if symbols don't match consecutively reset count to zero
                     count = 0;
@@ -310,6 +333,7 @@ var game_template = function(main_element,board_size,win_size){
         /*
          Show out custom win message popup! No more alerts!
          */
+        console.log("Player Won!");
         $("#win").html('Player ' + player.get_symbol()+ ' won the game!');
         $("#win").show();
         $("#reset_button").addClass('blink_me');
@@ -317,6 +341,17 @@ var game_template = function(main_element,board_size,win_size){
         $(".ttt_cell").addClass("selected");
         this.no_click = true;
     };
+
+    this.callTie = function(){
+        if(!this.applause) {
+            $("#win").html('It\'s a draw!');
+            $("#win").show();
+            $("#reset_button").addClass('blink_me');
+            run_blink();
+            $(".ttt_cell").addClass("selected");
+            this.no_click = true;
+        }
+    }
 };
 
 var player_template = function(symbol, element){
@@ -462,6 +497,8 @@ function calltimer(that) {
             $("#win span").addClass("blink_me");
             run_blink();
             $("#win").show();
+            var times_up = new Audio('assets/sounds/timesup.mp3');
+            times_up.play();
             $("#win").click(function(){
                 $(this).hide();
                 $("#win span").removeClass("blink_me");
@@ -470,14 +507,17 @@ function calltimer(that) {
 
             $("#start_clock").addClass("timer_no_start").removeClass("timer");
             $("#start_mask").addClass("mask_no_start").removeClass("mask");
+
+            $("#temp_placeholder").remove();
+            this.no_click = true;
         }
         /*
          As long as the timer is not 0, update our timer div with the current count
          */
         $("#timer span").text(count);
-        var audio = new Audio('assets/sounds/Tick.mp3');
-        audio.play();
-        console.log(count);
+        var tick = new Audio('assets/sounds/tick.mp3');
+        tick.play();
+        //console.log(count);
 
     }, 1000); //1000 will  run it every 1 second
 }
