@@ -155,6 +155,7 @@ var cell_template = function(parent){
          class and symbol.
          */
         self.parent.cell_clicked(self,0);
+
     };
 
     this.add_temp_placeholder = function(symbol){
