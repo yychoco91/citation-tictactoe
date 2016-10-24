@@ -64,15 +64,16 @@ var cell_template = function(parent){
         $("#answer").on("click",".choices",function() {
             //console.log("random is " + randomIndex);
             var userChoice = $(this).text();
+            $(this).addClass('answer_selected');
             //debugger;
             if(userChoice === answerArray[randomIndex])
             {
                 console.log($(this));
                 $(this).addClass('green_advice');
-                var advice = $("<div>", {
-                    class: "green_advice",
-                    text: answerArray[randomIndex]
-                });
+                // var advice = $("<div>", {
+                //     class: "green_advice",
+                //     text: answerArray[randomIndex]
+                // });
                 this.outcome = true;
                 //$("#answer").append(advice);
                 // var count_this = $(".choices").length;
@@ -86,18 +87,18 @@ var cell_template = function(parent){
                 console.log($(this));
                 $(this).addClass('red_advice');
                 var advice = $("<div>", {
-                    class: "red_advice",
+                    class: "green_advice",
                     text: answerArray[randomIndex]
                 });
-                // var count_this = $(".choices").length;
+                var count_this = $(".choices").length;
                 // console.log("count is " + count_this);
                 // for(var i = 0;i<count_this;i++) {
                 //
                 //     $('.choices:eq('+i+')').hide(i*500);
                 //
                 // }
-                //$(".choices").hide(1000);
-                //$("#answer").append(advice);
+                // $(".choices").hide(1000);
+                $("#answer").append(advice);
                 this.outcome = false;
             }
 
@@ -187,6 +188,8 @@ var game_template = function(main_element,board_size,win_size){
     this.cell_array = [];
     this.players = [];
     this.current_player = 0;
+
+    // TODO add properties to hold counter for player x wins, player o wins, total games played
     //   0    1    2
     //   3    4    5
     //   6    7    8
@@ -271,6 +274,7 @@ var game_template = function(main_element,board_size,win_size){
                          */
                         clearInterval(main_game.timeCounter); // stop the timer in event of win
                         console.log('someone won'); this.player_wins(this.players[this.current_player]);
+                        // TODO Here is where you increment the object properties for the winner
                     }//end of count == 3
 
                 } else { //if symbols don't match consecutively reset count to zero
@@ -278,7 +282,6 @@ var game_template = function(main_element,board_size,win_size){
                 }//end of symbols match
             } //end of inner loop
         } //end of outer loop
-        //TODO check conditions
     };
     this.player_wins = function(player){
         //console.log(player.get_symbol()+' won the game');
@@ -510,7 +513,7 @@ var choicesArray=['Yes<br>No',
     '(a)No, only your paper needs to have page numbers; <br>(b)Yes, your paper, works cited, and annotated bibliography should have a running page number from the beginning of the document to the end.',
     '(a)On the same page right after the last paragraph of your paper;<br>(b)On page one of your document;<br>(c)On a separate page after your paper.',
     '(a)A TV show;<br>(b)A book;<br>(c)A journal;<br>(d)A website;<br>(e)A database;<br>(f)All of the above.',
-    '(a)Baron, Sandra.<em>Yosemite National Park</em>. New York: Chelsea, 2010, pp. 2-10. <br>(b)Baron, Sandra.<em> Yosemite National Park</em>, Chelsea, 2010, pp. 2-10',
+    '(a)Baron, Sandra.<em>Yosemite National Park</em>. New York: Chelsea, 2010, pp. 2-10. <br>(b)Baron, Sandra. Yosemite National Park, Chelsea, 2010, pp. 2-10',
     '(a)Yes. That’s why the boxes are there. <br>(b)No. Only fill in the boxes necessary for the source you are citing.',
     '(a)Ten spaces or two tabs <br>(b)Five spaces or one tab.',
     '(a)No. URLs are long and messy and should never be included <br>(b)Yes! URLs are required by the new MLA 8 style.',
@@ -539,7 +542,7 @@ var answerArray=['No',
     '(b)Yes, your paper, works cited, and annotated bibliography should have a running page number from the beginning of the document to the end.',
     '(c)On a separate page after your paper.',
     '(f)All of the above.',
-    '(b)Baron, Sandra.Yosemite National Park, Chelsea, 2010, pp. 2-10',
+    '(b)Baron, Sandra. Yosemite National Park, Chelsea, 2010, pp. 2-10',
     '(b)No. Only fill in the boxes necessary for the source you are citing.',
     '(b)Five spaces or one tab.',
     '(b)Yes! URLs are required by the new MLA 8 style.',

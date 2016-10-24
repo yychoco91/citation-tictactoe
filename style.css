@@ -174,7 +174,7 @@ h3 {
 
 }
 #question {
-    height: 65%;
+    height: 50%;
     background-color: #545454;
     border: solid black 3px;
     margin: 0;
@@ -194,6 +194,10 @@ h3 {
 .choices:hover {
     background-color: lightblue;
     cursor: pointer;
+}
+
+.answer_selected {
+    border: 3px solid #3f51b5 !important;
 }
 
 .red_advice {
