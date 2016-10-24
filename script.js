@@ -25,6 +25,13 @@ var cell_template = function(parent){
         }
         this.outcome = false; // our outcome is set to false as default
         //debugger;
+
+        $("#temp_placeholder").remove();
+
+        var current_player = self.parent.get_current_player();
+        self.symbol = current_player.get_symbol();
+        self.add_temp_placeholder(self.symbol);
+
         clearInterval(main_game.timeCounter); // stops the timer from counting down
         var randomIndex = Math.floor(Math.random() * questionArray.length);
         /*
@@ -62,6 +69,7 @@ var cell_template = function(parent){
          then it assigns a red_advice class.
          */
         $("#answer").on("click",".choices",function() {
+            $("#temp_placeholder").remove();
             //console.log("random is " + randomIndex);
             var userChoice = $(this).text();
             $(this).addClass('answer_selected');
@@ -144,6 +152,18 @@ var cell_template = function(parent){
          so win condition does not gets check and added to our count
          */
         self.parent.cell_clicked(self,0);
+    };
+
+    this.add_temp_placeholder = function(symbol){
+        var inside = $("<div>",{
+            id: 'temp_placeholder',
+            class: 'inside_ttt blink_me transparent',
+            html:symbol
+        });
+        console.log("inside ",symbol);
+
+        self.element.append(inside);
+        run_blink();
     };
 
     this.change_symbol = function(symbol){
