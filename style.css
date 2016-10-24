@@ -37,15 +37,25 @@ body {
     font-weight: bold;
 }
 #stats {
-    height: 90%;
+    font-size:12px;
+    /*height: 90%;*/
     border: solid black 1px;
-    text-shadow: 1px 2px 0 white,
-    1px 2px 0 black;
-    background-color: rgba(255,255,255,.5);
+    text-shadow: 0px 0px 0 white,
+    0px 0px 0 black;
+    background-color: rgba(255,255,255,.75);
+    font-family: Arial, sans-serif;
+    border-radius: 5px;
 }
-h3 {
-    margin: 0;
+
+#stats h3:first-child {
+    text-align: center;
+    font-family: 'Coda Caption', sans-serif;
 }
+
+#stats h3 {
+    text-align: center;
+}
+
 #timer {
     /*border-radius: 90px;*/
     height: 19vh;
@@ -56,8 +66,8 @@ h3 {
     background-repeat: no-repeat;
     font-family: 'Coda Caption', sans-serif;
     color: black;
-    text-shadow: 3px 2px 0 white,
-    4px 3px 0 black;
+    text-shadow: 0px 0px 0 white,
+    0px 0px 0 black;
     font-size: 2vw;
     position: relative;
     /*background-color: red;*/
@@ -71,7 +81,7 @@ h3 {
 
 #player_area {
     text-align: center;
-    width: 65%;
+    /*width: 65%;*/
     height: 100%;
     text-shadow: 1px 2px 0 white,
     1px 2px 0 black;

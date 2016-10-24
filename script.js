@@ -2,9 +2,9 @@
  * Created by danh on 10/18/16.
  */
 
-var games_played = null;
-var player_x_wins = null;
-var player_o_wins = null;
+var games_played = 0;
+var player_x_wins = 0;
+var player_o_wins = 0;
 
 var cell_template = function(parent){
     var self = this;
@@ -38,7 +38,8 @@ var cell_template = function(parent){
         self.add_temp_placeholder(current_player.get_symbol());
 
         clearInterval(main_game.timeCounter); // stops the timer from counting down
-        var randomIndex = Math.floor(Math.random() * (questionArray.length + 1));
+        var randomIndex = Math.floor(Math.random() * (questionArray.length));
+        //console.log(randomIndex);
         /*
          random generate a number between our question array length.
          Afterwards, takes the same random index and look at the choices array
@@ -81,7 +82,7 @@ var cell_template = function(parent){
             //debugger;
             if(userChoice === answerArray[randomIndex])
             {
-                console.log($(this));
+                //console.log($(this));
                 $(this).addClass('green_advice');
                 var coins = new Audio('assets/sounds/coins.mp3');
                 coins.volume = 0.2;
@@ -100,7 +101,7 @@ var cell_template = function(parent){
                 //
                 // }
             } else { // When the user click on the wrong answer
-                console.log($(this));
+                //console.log($(this));
                 $(this).addClass('red_advice');
                 var advice = $("<div>", {
                     class: "green_advice",
@@ -132,7 +133,7 @@ var cell_template = function(parent){
                 //debugger;
                 var current_player = self.parent.get_current_player();
                 self.symbol = current_player.get_symbol();
-                console.log('current player\'s symbol: '+self.symbol);
+                //console.log('current player\'s symbol: '+self.symbol);
                 self.element.addClass('selected');
                 self.change_symbol(self.symbol);
                 self.parent.cell_clicked(self,1); // run win condition check
@@ -164,7 +165,7 @@ var cell_template = function(parent){
             class: 'inside_ttt blink_me transparent',
             html:symbol
         });
-        console.log("inside ",symbol);
+        //console.log("inside ",symbol);
 
         self.element.append(inside);
         run_blink();
@@ -176,11 +177,11 @@ var cell_template = function(parent){
             class: 'inside_ttt',
             html:symbol
         });
-        console.log("Create! " + self.parent.board_size);
+        //console.log("Create! " + self.parent.board_size);
         self.element.append(inside);
         if(self.parent.board_size > 0 && self.parent.board_size <= 3) {
-            console.log("YES");
-            console.log("size is " + $(".inside_ttt").css("font-size"));
+            //console.log("YES");
+            //console.log("size is " + $(".inside_ttt").css("font-size"));
             $(".inside_ttt").css("font-size","9vh");
             //$(".inside_ttt").addClass("lg_font");
         } else if (self.parent.board_size > 3 && self.parent.board_size <= 8) {
@@ -277,13 +278,13 @@ var game_template = function(main_element,board_size,win_size){
         self.switch_players();
         self.players[self.current_player].activate_player();
 
-        console.log("how many cells " + this.cell_array.length);
+        //console.log("how many cells " + this.cell_array.length);
         this.total_cell = this.cell_array.length;
-        console.log("how many selected cells ", $(".selected").length);
+        //console.log("how many selected cells ", $(".selected").length);
 
         this.total_selected = $(".inside_ttt").length;
         if (this.total_cell === this.total_selected) {
-            console.log("TIE!");
+            //console.log("TIE!");
             this.callTie();
         }
 
@@ -316,6 +317,7 @@ var game_template = function(main_element,board_size,win_size){
                             var applause = new Audio('assets/sounds/applause.mp3');
                             applause.play();
                             this.applause = true;
+                            //console.log(this.applause);
                         }
 
 
@@ -328,9 +330,6 @@ var game_template = function(main_element,board_size,win_size){
         } //end of outer loop
     };
     this.player_wins = function(player){
-        //console.log(player.get_symbol()+' won the game');
-        //alert(player.get_symbol()+' won the game');
-
         /*
          Show out custom win message popup! No more alerts!
          */
@@ -341,9 +340,11 @@ var game_template = function(main_element,board_size,win_size){
         run_blink();
         $(".ttt_cell").addClass("selected");
         this.no_click = true;
+        games_played++;
     };
 
     this.callTie = function(){
+        console.log(this.applause);
         if(!this.applause) {
             $("#win").html('It\'s a draw!');
             $("#win").show();
@@ -468,6 +469,10 @@ function clear_all() {
     main_game.create_players();
     $("#win").hide();
     $("#reset_button").removeClass('blink_me');
+    games_played = 0;
+    player_o_wins = 0;
+    player_x_wins = 0;
+
 }
 
 
