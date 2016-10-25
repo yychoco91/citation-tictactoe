@@ -284,7 +284,7 @@ var game_template = function(main_element,board_size,win_size){
         //console.log("how many selected cells ", $(".inside_ttt").length);
 
         this.total_selected = $(".inside_ttt").length;
-        debugger;
+        //debugger;
         if (this.total_cell === this.total_selected) { // checks if total markers = available spaces and no win
             //console.log("TIE!");
             this.callTie();
